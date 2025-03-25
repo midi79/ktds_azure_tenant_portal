@@ -1,0 +1,28 @@
+.long__input__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    padding: 14px;
+    gap: 16px;
+    outline: 2px solid #ffc58a;
+    transition: outline-color 0.1s ease;
+    background-color: white;
+    box-shadow: 0px 2px 8px 0px rgba(228, 231, 236, 0.7);
+}
+
+.long__input__content {
+    outline: none;
+    border: none;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 17px;
+    background-color: #ffffff;
+
+    color: #c26e07;
+}
+
+.long__input__wrapper:focus-within {
+    outline-color: #c98c4f;
+}

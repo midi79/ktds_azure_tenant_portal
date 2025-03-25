@@ -1,0 +1,24 @@
+.input__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    padding: 14px;
+    gap: 16px;
+    border-radius: 8px;
+    border: 1px solid gray;
+    background-color: white;
+    box-shadow: 0px 2px 8px 0px rgba(228, 231, 236, 0.7);
+}
+
+.input__content {
+    outline: none;
+    border: none;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 17px;
+    background-color: #ffffff;
+
+    color: rgb(89, 89, 89);
+}

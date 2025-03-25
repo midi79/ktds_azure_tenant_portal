@@ -1,0 +1,76 @@
+.board__edit__wrapper {
+    width: 100vw;
+    height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-top: 3px solid #ffdeb3;
+    border-bottom: 2px solid #ffdeb3;
+    background-color: #f6f2ec;
+    color: #936434;
+}
+
+.board__edit__header {
+    display: flex;
+    justify-content: space-between;
+    width: 1030px;
+    height: 110px;
+}
+
+.board__edit__header__left {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0 10px 0;
+}
+
+.board__edit__title {
+    font-size: 34px;
+    font-weight: 600;
+    color: #fdab5a;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+    text-shadow: 1px 1px 1px #e0e0e0;
+}
+
+.board__edit__error {
+    font-size: 18px;
+    color: red;
+    font-weight: 600;
+}
+
+.board__edit__button {
+    display: flex;
+    height: 40px;
+    margin-top: 60px;
+    gap: 10px;
+}
+
+.board__edit__user {
+    display: flex;
+    width: 1030px;
+    justify-content: flex-start;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.board__edit__editor {
+    width: 1030px;
+    height: 642px;
+    padding-bottom: 42px;
+    margin: 10px 0 10px 0;
+    background-color: white;
+    border: 1.9px solid #fcba78;
+}
+
+.board__edit__tag {
+    background-color: #936434;
+}
+
+.board__edit__validation {
+    width: 1030px;
+    margin-top: 5px;
+    font-size: 18px;
+    color: red;
+    font-weight: 600;
+}

@@ -1,0 +1,23 @@
+.footer__wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 75px;
+    background-color: white;
+    border-bottom: 2px solid rgb(255, 222, 179);
+}
+
+.footer__content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    color: #683e00;
+    padding: 0 20px 0 20px;
+    gap: 20px;
+}
+
+.footer__contact {
+    padding-top: 5px;
+}
