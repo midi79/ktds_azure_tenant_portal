@@ -1,6 +1,7 @@
 package com.ktds.azure.tenant.requestboard.service;
 
 
+import com.ktds.azure.tenant.requestboard.dto.RequestBoardDto;
 import com.ktds.azure.tenant.requestboard.dto.RequestBoardListDto;
 import com.ktds.azure.tenant.requestboard.model.RequestBoard;
 import com.ktds.azure.tenant.requestboard.repository.RequestBoardRepository;
@@ -29,5 +30,22 @@ public class RequestBoardService {
                 .map(RequestBoardMapper::toBoardListDto).toList();
         return new PageImpl<>(listDtos, pageable, boardList.getTotalElements());
     }
+
+    public RequestBoardDto saveRequestBoard(RequestBoardDto requestBoardDto) {
+        RequestBoard board = RequestBoardMapper.toEntity(requestBoardDto);
+        requestBoardRepository.save(board);
+        return requestBoardDto;
+    }
+
+    public RequestBoardDto getRequestBoardById(Long id) {
+        RequestBoard board = requestBoardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+        return RequestBoardMapper.toDto(board);
+    }
+
+    public RequestBoardDto updateRequestBoard(RequestBoardDto requestBoardDto) {
+        RequestBoard requestBoard = requestBoardRepository.findById(requestBoardDto.getId()).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+        return RequestBoardMapper.toDto(requestBoardRepository.save(RequestBoardMapper.toEntity(requestBoardDto)));
+    }
+
 
 }

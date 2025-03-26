@@ -27,7 +27,7 @@ const listTitle: string[] = ["번호", "제목", "작성자", "작성일시", "�
 
 const RequestBoardListPage = ({ testData }: ITestProp) => {
     const [boardListData, setBoardListData] = useState<IBoardList[]>([]);
-    const [size, setSize] = useState<number>(15);
+    const [size, setSize] = useState<number>(10);
     const [page, setPage] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [searchOption, setSearchOption] = useState<any>("title");
@@ -37,6 +37,12 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
 
     const navigate = useNavigate();
 
+    const stateAlias = [{ name: "SAVE", value: "저장"},
+        {name: "REQUEST", value: "등록"},
+        {name: "APPROVED", value: "승인"},
+        {name: "DENY", value: "반려"},
+    ];
+    
     const {
         data: boardList,
         isLoading: isListLoading,
@@ -63,8 +69,13 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
         navigate("/pages/request/edit");
     };
 
-    const onTitleClickHandler = (id: number) => {
-        navigate(`/pages/request/${id}`);
+    const onTitleClickHandler = (item: IBoardList) => {        
+        if (item.state === "SAVE") {
+            navigate(`/pages/request/edit/${item.id}`);
+        } else {
+            navigate(`/pages/request/view/${item.id}`);
+        }
+        
     };
 
     const onPageChangeHandler = (newPage: number) => {
@@ -97,7 +108,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
             setFromDate(null);
             setToDate(null);
             setPage(0);
-            setSize(15);
+            setSize(10);
         };
 
         await resetAllStates();
@@ -133,14 +144,14 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                 boardListData.map((item: any, index: number) => (
                                     <tr className={styles.board__list} key={item.id}>                                        
                                         <td className={styles.td__id}>{item.id}</td>
-                                        <td className={styles.td__title} onClick={() => onTitleClickHandler(item.id)}>
+                                        <td className={styles.td__title} onClick={() => onTitleClickHandler(item)}>
                                             {item.title}
                                         </td>
                                         <td>{item.writer}</td>
                                         <td className={styles.td__date}>
                                             <DateTimeConverter date={item.createDate} />
                                         </td>
-                                        <td className={styles.td__state}>{item.state}</td>
+                                        <td className={styles.td__state}>{stateAlias.find((state) => state.name === item.state)?.value }</td>
                                     </tr>
                                 ))}
                         </tbody>
@@ -162,13 +173,13 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                         selected={fromDate}
                                         onChange={(date: any) => setFromDate(date ? format(date, "yyyy-MM-dd") : null)}
                                         placeholderText="From-date"
-                                        dateFormat="dd-MM-yyyy"
+                                        dateFormat="yyyy-MM-dd"
                                     />
                                     <DatePicker
                                         selected={toDate}
                                         onChange={(date: any) => setToDate(date ? format(date, "yyyy-MM-dd") : null)}
                                         placeholderText="To-date"
-                                        dateFormat="dd-MM-yyyy"
+                                        dateFormat="yyyy-MM-dd"
                                     />
                                 </>
                             ) : (
@@ -207,10 +218,10 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                     {boardList && boardList.totalPages > 1 && (
                         <div className={styles.board__pagination}>
                             <button onClick={() => onPageChangeHandler(0)} disabled={page === 0}>
-                                First
+                                처음
                             </button>
                             <button onClick={() => onPageChangeHandler(page - 1)} disabled={page === 0}>
-                                Previous
+                                이전
                             </button>
                             {getPageNumbers().map((pageNumber) => (
                                 <button
@@ -223,13 +234,13 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                 </button>
                             ))}
                             <button onClick={() => onPageChangeHandler(page + 1)} disabled={page + 1 >= totalPages}>
-                                Next
+                                다음
                             </button>
                             <button
                                 onClick={() => onPageChangeHandler(totalPages - 1)}
                                 disabled={page + 1 >= totalPages}
                             >
-                                Last
+                                마지막
                             </button>
                         </div>
                     )}

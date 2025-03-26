@@ -29,7 +29,7 @@ const router = createBrowserRouter([
                 element: <RequestBoardEditPage />,
             },
             {
-                path: "pages/request/:id",
+                path: "pages/request/view/:id",
                 element: <RequestBoardViewPage />,
             },
             {

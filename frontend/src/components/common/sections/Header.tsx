@@ -22,7 +22,7 @@ const Header = () => {
         <header className={styles.header__wrapper}>
             <div className={styles.header__title} onClick={onTitleClickHandler}>
                 <img src={ktdsLogoImage} alt="KT DS" />
-                <p>Azure Tenant 신청 사이트</p>
+                <p>Azure Tenant 신청 Portal</p>
             </div>
             <nav className={styles.nav__wrapper}>
                 {menus.map((menu) => (

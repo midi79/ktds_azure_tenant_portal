@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -27,22 +28,31 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
     @Column
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String writer;
 
     @Column
     private String projectCode;
 
-    @Column
+    @Column(nullable = false)
     private String projectName;
 
-    @Column(nullable = false)
+    @Column
+    private String purpose;
+
+    @Column
+    private LocalDate startDate;
+
+    @Column
+    private LocalDate endDate;
+
+    @Column
     private String budgetManager;
 
-    @Column(nullable = false)
+    @Column
     private String operationManager;
 
-    @Column(nullable = false)
+    @Column
     private Long budget;
 
     @Column

@@ -4,7 +4,7 @@ import styles from "./Checkbox.module.css";
 interface ICheckboxProp {
     label?: string;
     checkHandler: (event: ChangeEvent<HTMLInputElement>) => void;
-    isChecked: boolean | undefined;
+    isChecked?: boolean | undefined;
     index?: number;
     type: string;
 }
@@ -13,18 +13,16 @@ const Checkbox = ({ label, isChecked, checkHandler, type, index = -1, ...rest }:
     //console.log(type + index + " Checkbox changed : " + isChecked);
 
     return (
-        <div className={styles.checkbox__wrapper__1}>
-            <input
+        <label className={styles.custom__checkbox}>
+            <input type="checkbox"
                 id={`custom-checkbox-${type}${index}`}
-                className={styles.substituted}
-                type="checkbox"
+                className={styles.inp__cbx}            
                 aria-hidden="true"
                 checked={isChecked}
                 onChange={checkHandler}
-                {...rest}
-            />
-            <label htmlFor={`custom-checkbox-${type}${index}`}>{label}</label>
-        </div>
+                {...rest}/>     
+                <span className={styles.checkmark}></span>
+        </label>        
     );
 };
 

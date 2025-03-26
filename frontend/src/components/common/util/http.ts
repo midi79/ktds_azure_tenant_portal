@@ -17,9 +17,9 @@ interface IFavoriteProp {
     favorite: boolean;
 }
 
-export async function createNewBoard(data: any) {
+export async function saveRequestBoard(data: any) {
     try {
-        const response = await axios.post("http://localhost:8090/api/v1/request-board/create", data.board);
+        const response = await axios.post("http://localhost:8090/api/v1/request-board/save", data.board);
 
         if (response.status !== 200) {
             throw new Error(`Unexpected status: ${response.status}`);
@@ -33,7 +33,7 @@ export async function createNewBoard(data: any) {
     }
 }
 
-export async function updateBoard(data: any) {
+export async function updateRequestBoard(data: any) {
     try {
         const response = await axios.patch("http://localhost:8090/api/v1/request-board/update", data.board, {
             headers: { "Content-Type": "application/json" },
@@ -138,7 +138,7 @@ export async function updateBoardFavorite({ id, favorite }: IFavoriteProp) {
     }
 }
 
-export async function getBoard(id: string | null | undefined, type?: string) {
+export async function getRequestBoard(id: string | null | undefined, type?: string) {
     let URL = `http://localhost:8090/api/v1/request-board/${id}`;
 
     if (type === "update") {

@@ -3,26 +3,22 @@
     align-items: center;
     justify-content: center;
     width: 300px;
-    padding: 14px;
-    gap: 16px;
-    outline: 2px solid #ffc58a;
+    padding: 8px;    
+    outline: 1px solid #acacac;
     transition: outline-color 0.1s ease;
-    background-color: white;
-    box-shadow: 0px 2px 8px 0px rgba(228, 231, 236, 0.7);
+    background-color: white;    
 }
 
 .long__input__content {
     outline: none;
     border: none;
     width: 100%;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 17px;
+    font-size: 15px;
+    font-weight: 500;    
     background-color: #ffffff;
-
-    color: #c26e07;
+    color: #000000;
 }
 
-.long__input__wrapper:focus-within {
-    outline-color: #c98c4f;
+.long__input__wrapper:focus-within {    
+    outline: 1.5px solid #241e5a;
 }

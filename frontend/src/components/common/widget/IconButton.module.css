@@ -1,9 +1,9 @@
 .custom__button {
     display: flex;
-    background-color: rgb(231, 231, 231);;
+    background-color: rgb(255, 255, 255);;
     color: black;
     padding: 5px 20px;
-    border: none;
+    border: 1px solid rgb(168, 168, 168);
     border-radius: 15px;    
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.3s ease;
@@ -16,5 +16,5 @@
 }
 
 .custom__button:hover {
-    background-color: #d8d8d8;
+    background-color: #e7e7e7;
 }

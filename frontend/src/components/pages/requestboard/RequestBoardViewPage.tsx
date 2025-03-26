@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../common/widget/Button";
 import styles from "./RequestBoardViewPage.module.css";
 import { useQuery } from "@tanstack/react-query";
-import { getBoard } from "../../common/util/http";
+import { getRequestBoard } from "../../common/util/http";
 import { DateTimeConverter } from "../../common/util/datetime";
 
 const RequestBoardViewPage = () => {
@@ -12,7 +12,7 @@ const RequestBoardViewPage = () => {
 
     const { data, isError, error } = useQuery({
         queryKey: ["board", id],
-        queryFn: () => getBoard(id),
+        queryFn: () => getRequestBoard(id),
     });
 
     const onEditClickHandler = () => {

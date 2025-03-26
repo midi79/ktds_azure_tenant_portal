@@ -1,5 +1,6 @@
 package com.ktds.azure.tenant.requestboard.controller;
 
+import com.ktds.azure.tenant.requestboard.dto.RequestBoardDto;
 import com.ktds.azure.tenant.requestboard.dto.RequestBoardListDto;
 import com.ktds.azure.tenant.requestboard.service.RequestBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/request-board")
@@ -23,4 +22,21 @@ public class RequestBoardController {
     public ResponseEntity<Page<RequestBoardListDto>> getAllRequestBoards(@PageableDefault(sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
         return ResponseEntity.ok(requestBoardService.getAllRequestBoardList(pageable));
     }
+
+    @PostMapping("/save")
+    public ResponseEntity<RequestBoardDto> saveRequestBoard(@RequestBody RequestBoardDto requestBoardDto) {
+        return ResponseEntity.ok(requestBoardService.saveRequestBoard(requestBoardDto));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RequestBoardDto> getRequestBoard(@PathVariable("id") Long id) {
+        RequestBoardDto requestBoardDto = requestBoardService.getRequestBoardById(id);
+        return requestBoardDto != null ? ResponseEntity.ok(requestBoardDto) : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<RequestBoardDto> updateRequestBoard(@RequestBody RequestBoardDto requestBoardDto) {
+        return ResponseEntity.ok(requestBoardService.updateRequestBoard(requestBoardDto));
+    }
+
 }

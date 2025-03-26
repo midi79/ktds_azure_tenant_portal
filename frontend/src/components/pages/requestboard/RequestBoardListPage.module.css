@@ -26,7 +26,8 @@
 
 .board__top {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    margin-top: 10px;
 }
 
 
@@ -75,11 +76,11 @@
 }
 
 .col-title {
-    width: 450px;
+    width: 550px;
 }
 
 .col-writer {
-    width: 150px;
+    width: 180px;
 }
 
 .col-date {
@@ -99,9 +100,9 @@
 }
 
 .board__pagination button {
-    background-color: #fbe2ca;
-    color: black;
-    border: 1px solid #e2aa73;
+    background-color: #ffffff;
+    color: rgb(41, 41, 41);
+    border: 1px solid #303030;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
@@ -110,12 +111,12 @@
 }
 
 .board__pagination button:hover:not(:disabled) {
-    background-color: #f5cfac;
+    background-color: #dfe2f5;
 }
 
 .board__pagination button:disabled {
-    background-color: #fff7ed;
-    color: #936434;
+    background-color: #e9e8e8;
+    color: #616161;
     cursor: not-allowed;
 }
 
@@ -154,13 +155,13 @@
 .board__search__group input {
     padding: 0.5rem;
     font-size: 1rem;
-    background-color: #f5cfac;
-    border: 1px solid #e2aa73;
-    color: #936434;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
 }
 
 .board__search__group input::placeholder {
-    color: #fff0e3;
+    color: #a8a8a8;
 }
 
 .board__search__group button {
