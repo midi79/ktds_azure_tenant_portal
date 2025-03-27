@@ -47,5 +47,11 @@ public class RequestBoardService {
         return RequestBoardMapper.toDto(requestBoardRepository.save(RequestBoardMapper.toEntity(requestBoardDto)));
     }
 
+    public void updateRequestBoardState(RequestBoardDto requestBoardDto) {
+        requestBoardRepository.updateState(requestBoardDto.getId(), requestBoardDto.getState());
+    }
 
+    public void deleteReqeuestBoardsByIds(RequestBoardDto requestBoardDto) {
+        requestBoardRepository.deleteById(requestBoardDto.getId());
+    }
 }

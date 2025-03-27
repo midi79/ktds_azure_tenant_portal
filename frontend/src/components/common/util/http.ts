@@ -28,7 +28,7 @@ export async function saveRequestBoard(data: any) {
         throw new Error(
             axios.isAxiosError(error) && error.response
                 ? error.response.data
-                : "An error occurred while save board data"
+                : "An error occurred while save reqeust board data"
         );
     }
 }
@@ -46,7 +46,26 @@ export async function updateRequestBoard(data: any) {
         throw new Error(
             axios.isAxiosError(error) && error.response
                 ? error.response.data
-                : "An error occurred while update board data"
+                : "An error occurred while update reqeust board data"
+        );
+    }
+}
+
+export async function updateRequestBoardState(data: any) {
+    console.log(data);
+    try {
+        const response = await axios.patch("http://localhost:8090/api/v1/request-board/update/state", data.board, {
+            headers: { "Content-Type": "application/json" },
+        });
+
+        if (response.status !== 200) {
+            throw new Error(`Unexpected status: ${response.status}`);
+        }
+    } catch (error: any) {
+        throw new Error(
+            axios.isAxiosError(error) && error.response
+                ? error.response.data
+                : "An error occurred while update reqeust board data"
         );
     }
 }
@@ -98,14 +117,14 @@ export async function getRequestBoards({ size, page, searchOption, searchTerm, f
         throw new Error(
             axios.isAxiosError(error) && error.response
                 ? error.response.data
-                : "An error occurred while fetching board data"
+                : "An error occurred while fetching reqeust board data"
         );
     }
 }
 
-export async function deleteBoards(data: any) {
+export async function deleteRequestBoard(data: any) {
     try {
-        const response = await axios.delete("http://localhost:8090/api/v1/request-board/delete", { data: data.boardIds });
+        const response = await axios.delete("http://localhost:8090/api/v1/request-board/delete", {data: data.board});
 
         if (response.status !== 204) {
             throw new Error(`Unexpected status: ${response.status}`);
@@ -115,25 +134,7 @@ export async function deleteBoards(data: any) {
         throw new Error(
             axios.isAxiosError(error) && error.response
                 ? error.response.data
-                : "An error occurred while delete board data"
-        );
-    }
-}
-
-export async function updateBoardFavorite({ id, favorite }: IFavoriteProp) {
-    const URL = `http://localhost:8090/api/v1/request-board/update/${id}/favorite`;
-    try {
-        const response = await axios.patch(URL, favorite, { headers: { "Content-Type": "application/json" } });
-
-        if (response.status !== 204) {
-            throw new Error(`Unexpected status: ${response.status}`);
-        }
-    } catch (error: any) {
-        console.log(error);
-        throw new Error(
-            axios.isAxiosError(error) && error.response
-                ? error.response.data
-                : "An error occurred while update favorite data"
+                : "An error occurred while delete reqeust board data"
         );
     }
 }
@@ -162,25 +163,6 @@ export async function getRequestBoard(id: string | null | undefined, type?: stri
         );
     }
 }
-
-export async function verifyPassword(data: any) {
-    console.log("verifyPassword : ", data);
-    try {
-        const response = await axios.post("http://localhost:8090/api/v1/request-board/verify", data);
-
-        if (response.status !== 200) {
-            throw new Error(`Unexpected status: ${response.status}`);
-        }
-        return response.data;
-    } catch (error: any) {
-        throw new Error(
-            axios.isAxiosError(error) && error.response
-                ? error.response.data
-                : "An error occurred while verify password"
-        );
-    }
-}
-
 
 function checkNotNull(data: any) {
     if (data || data === null || data == undefined || data === "") {

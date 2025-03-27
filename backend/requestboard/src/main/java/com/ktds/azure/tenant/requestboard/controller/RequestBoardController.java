@@ -39,4 +39,15 @@ public class RequestBoardController {
         return ResponseEntity.ok(requestBoardService.updateRequestBoard(requestBoardDto));
     }
 
+    @PatchMapping("/update/state")
+    public ResponseEntity<RequestBoardDto> updateRequestBoardState(@RequestBody RequestBoardDto requestBoardDto) {
+        requestBoardService.updateRequestBoardState(requestBoardDto);
+        return ResponseEntity.ok(requestBoardService.getRequestBoardById(requestBoardDto.getId()));
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteBoards(@RequestBody RequestBoardDto requestBoardDto) {
+        requestBoardService.deleteReqeuestBoardsByIds(requestBoardDto);
+        return ResponseEntity.noContent().build();
+    }
 }

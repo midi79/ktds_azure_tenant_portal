@@ -4,7 +4,7 @@ import Button from "../../common/widget/Button";
 import LongInput from "../../common/widget/LongInput";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { saveRequestBoard, getRequestBoard, updateRequestBoard } from "../../common/util/http";
+import { saveRequestBoard, getRequestBoard, updateRequestBoard, deleteRequestBoard } from "../../common/util/http";
 import RadioButton from "../../common/widget/RadioButton";
 import Checkbox from "../../common/widget/Checkbox";
 import DatePicker from "react-datepicker";
@@ -64,6 +64,18 @@ const RequestBoardEditPage = () => {
         },
     });
 
+    const {
+        mutate: deleteMutate,
+        isError: isDeleteError,
+        error: deleteError,
+    } = useMutation({
+        mutationFn: deleteRequestBoard,
+        onSuccess: () => {
+            alert("정상적으로 삭제되었습니다");
+            navigate("/pages/request");
+        },
+    });
+
     const validateForm = (formData: any) => {
 
         if (!formData.projectName) {
@@ -71,12 +83,12 @@ const RequestBoardEditPage = () => {
           setShowValidation(true);
           return false;
         }
-        if (!formData.projectCode && selectedType !== "sandbox") {
+        if (selectedType === "workload" && !formData.projectCode) {
           setValidationMessage("프로젝트 코드를 입력해주세요.");
           setShowValidation(true);
           return false;
         }
-        if (!startDate || !endDate) {
+        if (selectedType === "workload" && (!startDate || !endDate)) {
             setValidationMessage("프로젝트 기간을 선택해주세요.");
             setShowValidation(true);
             return false;
@@ -106,7 +118,7 @@ const RequestBoardEditPage = () => {
             setShowValidation(true);
             return false;
         }
-        if (!selectedMngGroup && selectedType !== "sandbox") {
+        if (selectedType === "workload" && !selectedMngGroup) {
             setValidationMessage("Tanent 관리그룹을 선택해주세요.");
             setShowValidation(true);
             return false;
@@ -179,6 +191,22 @@ const RequestBoardEditPage = () => {
 
     };
 
+    const onDeleteHandler = (event: any) => {
+        event.preventDefault();
+        setShowValidation(false);
+        setValidationMessage("");
+
+        if(confirm("삭제 하시겠습니까?")) {
+
+            const data = {
+                id : id,                
+            }
+
+            deleteMutate({ board: data });
+        }
+
+    }
+
     const onBackClickHandler = () => {
         if (confirm("리스트로 돌아가시겠습니까?")) {
             navigate("/pages/request");
@@ -227,6 +255,9 @@ const RequestBoardEditPage = () => {
                 <div className={styles.board__edit__button}>
                     <Button title="저장" type="button" onClickHandler={onSaveHandler}/>
                     <Button title="신청" type="submit" />
+                    { id && 
+                        <Button title="삭제" type="button" onClickHandler={onDeleteHandler}/>
+                    }
                     <Button title="뒤로가기" onClickHandler={onBackClickHandler} type="button" />
                 </div>
             </div>
@@ -411,6 +442,11 @@ const RequestBoardEditPage = () => {
             {isUpdateError && (
                 <div className={styles.board__edit__validation}>
                     {updateError.message || "Failed to update board. Please check your inputs and try again later."}
+                </div>
+            )}
+            {isDeleteError && (
+                <div className={styles.board__edit__validation}>
+                    {deleteError.message || "Failed to delete board. Please try again later."}
                 </div>
             )}
             {isBoardError && (

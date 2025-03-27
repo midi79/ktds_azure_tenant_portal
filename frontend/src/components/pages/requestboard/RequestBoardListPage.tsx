@@ -70,7 +70,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
     };
 
     const onTitleClickHandler = (item: IBoardList) => {        
-        if (item.state === "SAVE") {
+        if (item.state === "SAVE" || item.state === "DENY") {
             navigate(`/pages/request/edit/${item.id}`);
         } else {
             navigate(`/pages/request/view/${item.id}`);
