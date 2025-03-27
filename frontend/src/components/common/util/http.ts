@@ -17,7 +17,7 @@ const BASE_URL = "http://atportal.cbiz.kubepia.net";
 
 export async function saveRequestBoard(data: any) {
     try {
-        const response = await axios.post(BASE_URL + "/dash/api/v1/request-board/save", data.board);
+        const response = await axios.post(BASE_URL + "/dash/api/v1/request-board/save", data.board, { withCredentials: true });
 
         if (response.status !== 200) {
             throw new Error(`Unexpected status: ${response.status}`);
@@ -34,7 +34,8 @@ export async function saveRequestBoard(data: any) {
 export async function updateRequestBoard(data: any) {
     try {
         const response = await axios.patch(BASE_URL + "/dash/api/v1/request-board/update", data.board, {
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json" },   
+            withCredentials: true         
         });
 
         if (response.status !== 200) {
@@ -54,6 +55,7 @@ export async function updateRequestBoardState(data: any) {
     try {
         const response = await axios.patch(BASE_URL + "/dash/api/v1/request-board/update/state", data.board, {
             headers: { "Content-Type": "application/json" },
+            withCredentials: true
         });
 
         if (response.status !== 200) {
@@ -104,7 +106,7 @@ export async function getRequestBoards({ size, page, searchOption, searchTerm, f
 
     //console.log("URL : ", URL);
     try {
-        const response = await axios.get(URL);
+        const response = await axios.get(URL, { withCredentials: true });
 
         if (response.status === 200) {
             return response.data;
@@ -122,7 +124,7 @@ export async function getRequestBoards({ size, page, searchOption, searchTerm, f
 
 export async function deleteRequestBoard(data: any) {
     try {
-        const response = await axios.delete(BASE_URL + "/dash/api/v1/request-board/delete", {data: data.board});
+        const response = await axios.delete(BASE_URL + "/dash/api/v1/request-board/delete", {data: data.board, withCredentials: true}, );
 
         if (response.status !== 204) {
             throw new Error(`Unexpected status: ${response.status}`);
@@ -146,7 +148,7 @@ export async function getRequestBoard(id: string | null | undefined, type?: stri
 
     console.log("URL : ", URL);
     try {
-        const response = await axios.get(URL);
+        const response = await axios.get(URL, { withCredentials: true });
 
         if (response.status === 200) {
             return response.data;
