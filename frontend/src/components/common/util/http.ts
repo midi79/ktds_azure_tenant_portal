@@ -12,11 +12,6 @@ interface IPageProp {
     toDate: string | null;
 }
 
-interface IFavoriteProp {
-    id: number;
-    favorite: boolean;
-}
-
 export async function saveRequestBoard(data: any) {
     try {
         const response = await axios.post("http://localhost:8090/api/v1/request-board/save", data.board);

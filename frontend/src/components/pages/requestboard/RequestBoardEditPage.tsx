@@ -213,7 +213,7 @@ const RequestBoardEditPage = () => {
         }
     };
     
-    const onCheckboxHandler = (event: any) => {
+    const onCheckboxHandler = () => {
         setIsChecked(!isChecked);
     }
 

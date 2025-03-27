@@ -141,7 +141,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                         </thead>
                         <tbody>
                             {boardListData &&
-                                boardListData.map((item: any, index: number) => (
+                                boardListData.map((item: any) => (
                                     <tr className={styles.board__list} key={item.id}>                                        
                                         <td className={styles.td__id}>{item.id}</td>
                                         <td className={styles.td__title} onClick={() => onTitleClickHandler(item)}>
