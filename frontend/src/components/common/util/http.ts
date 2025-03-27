@@ -12,9 +12,12 @@ interface IPageProp {
     toDate: string | null;
 }
 
+//const BASE_URL = "http://localhost:8090";
+const BASE_URL = "http://atportal.cbiz.kubepia.net";
+
 export async function saveRequestBoard(data: any) {
     try {
-        const response = await axios.post("http://localhost:8090/api/v1/request-board/save", data.board);
+        const response = await axios.post(BASE_URL + "/dash/api/v1/request-board/save", data.board);
 
         if (response.status !== 200) {
             throw new Error(`Unexpected status: ${response.status}`);
@@ -30,7 +33,7 @@ export async function saveRequestBoard(data: any) {
 
 export async function updateRequestBoard(data: any) {
     try {
-        const response = await axios.patch("http://localhost:8090/api/v1/request-board/update", data.board, {
+        const response = await axios.patch(BASE_URL + "/dash/api/v1/request-board/update", data.board, {
             headers: { "Content-Type": "application/json" },
         });
 
@@ -49,7 +52,7 @@ export async function updateRequestBoard(data: any) {
 export async function updateRequestBoardState(data: any) {
     console.log(data);
     try {
-        const response = await axios.patch("http://localhost:8090/api/v1/request-board/update/state", data.board, {
+        const response = await axios.patch(BASE_URL + "/dash/api/v1/request-board/update/state", data.board, {
             headers: { "Content-Type": "application/json" },
         });
 
@@ -81,10 +84,10 @@ export async function getRequestBoards({ size, page, searchOption, searchTerm, f
     //     toDate
     // );
 
-    let URL = `http://localhost:8090/api/v1/request-board/all?size=${size}&page=${page}`;
+    let URL = `${BASE_URL}/dash/api/v1/request-board/all?size=${size}&page=${page}`;
 
     if ((checkNotNull(searchOption) && checkNotNull(searchTerm)) || searchOption === "date") {
-        URL = `http://localhost:8090/api/v1/request-board/search?size=${size}&page=${page}`;
+        URL = `${BASE_URL}/dash/api/v1/request-board/search?size=${size}&page=${page}`;
 
         if (searchOption !== "date") {
             URL += `&${searchOption}=${searchTerm}`;
@@ -119,7 +122,7 @@ export async function getRequestBoards({ size, page, searchOption, searchTerm, f
 
 export async function deleteRequestBoard(data: any) {
     try {
-        const response = await axios.delete("http://localhost:8090/api/v1/request-board/delete", {data: data.board});
+        const response = await axios.delete(BASE_URL + "/dash/api/v1/request-board/delete", {data: data.board});
 
         if (response.status !== 204) {
             throw new Error(`Unexpected status: ${response.status}`);
@@ -135,7 +138,7 @@ export async function deleteRequestBoard(data: any) {
 }
 
 export async function getRequestBoard(id: string | null | undefined, type?: string) {
-    let URL = `http://localhost:8090/api/v1/request-board/${id}`;
+    let URL = `${BASE_URL}/dash/api/v1/request-board/${id}`;
 
     if (type === "update") {
         URL += "/update";

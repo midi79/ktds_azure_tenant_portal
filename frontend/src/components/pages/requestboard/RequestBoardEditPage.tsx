@@ -150,7 +150,7 @@ const RequestBoardEditPage = () => {
             startDate,
             endDate,
             managementGroup : selectedMngGroup,       
-            writer : "아이유 회장",
+            writer : "김이박 책임",
             state : "SAVE",
             id: id ? id : null,
         };
@@ -178,7 +178,7 @@ const RequestBoardEditPage = () => {
             startDate,
             endDate,
             managementGroup : selectedMngGroup,       
-            writer : "아이유 회장",
+            writer : "김이박 책임",
             state : "REQUEST",
             id: id ? id : null,
         };  
@@ -426,9 +426,9 @@ const RequestBoardEditPage = () => {
                             </td>                            
                         </tr>
                         <tr>
-                            <td>첨부파일</td>
+                            <td>예산정보 링크</td>
                             <td>
-                                첨부파일
+                                예산정보 링크
                             </td>                            
                         </tr>                        
                     </tbody> 

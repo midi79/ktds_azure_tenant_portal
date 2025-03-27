@@ -174,9 +174,9 @@ const RequestBoardViewPage = () => {
                             </td>                            
                         </tr>
                         <tr>
-                            <td>첨부파일</td>
+                            <td>예산정보 링크</td>
                             <td>
-                                첨부파일
+                                예산정보 링크
                             </td>                            
                         </tr>                        
                     </tbody> 
