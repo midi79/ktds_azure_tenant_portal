@@ -4,6 +4,8 @@ import com.ktds.azure.tenant.requestboard.dto.RequestBoardDto;
 import com.ktds.azure.tenant.requestboard.dto.RequestBoardListDto;
 import com.ktds.azure.tenant.requestboard.model.RequestBoard;
 
+import java.time.LocalDateTime;
+
 public class RequestBoardMapper {
 
     public static RequestBoardListDto toBoardListDto(RequestBoard requestBoard) {
@@ -11,10 +13,19 @@ public class RequestBoardMapper {
             return null;
         }
 
+        LocalDateTime editDate = null;
+
+        if (requestBoard.getCreateDate() != null) {
+            editDate = requestBoard.getModifyDate().isAfter(requestBoard.getCreateDate())  ? requestBoard.getModifyDate() : requestBoard.getCreateDate();
+        } else {
+            editDate = requestBoard.getModifyDate();
+        }
+
+
         return new RequestBoardListDto(requestBoard.getId(),
                 requestBoard.getTitle(),
                 requestBoard.getWriter(),
-                requestBoard.getCreateDate(),
+                editDate,
                 requestBoard.getState());
     }
 

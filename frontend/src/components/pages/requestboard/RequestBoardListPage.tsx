@@ -147,8 +147,8 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                         <td className={styles.td__title} onClick={() => onTitleClickHandler(item)}>
                                             {item.title}
                                         </td>
-                                        <td>{item.writer}</td>
-                                        <td className={styles.td__date}>
+                                        <td style={{textAlign:"center"}}>{item.writer}</td>
+                                        <td style={{textAlign:"center"}}>
                                             <DateTimeConverter date={item.createDate} />
                                         </td>
                                         <td className={styles.td__state}>{stateAlias.find((state) => state.name === item.state)?.value }</td>

@@ -2,7 +2,9 @@ package com.ktds.azure.tenant.requestboard.controller;
 
 import com.ktds.azure.tenant.requestboard.dto.RequestBoardDto;
 import com.ktds.azure.tenant.requestboard.dto.RequestBoardListDto;
+import com.ktds.azure.tenant.requestboard.model.UserInfo;
 import com.ktds.azure.tenant.requestboard.service.RequestBoardService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,36 +20,41 @@ public class RequestBoardController {
     @Autowired
     RequestBoardService requestBoardService;
 
+    @GetMapping("/user")
+    public ResponseEntity<UserInfo> getUserInfor(HttpSession httpSession) {
+        return ResponseEntity.ok(requestBoardService.getUserInfo(httpSession));
+    }
+
     @GetMapping("/all")
     public ResponseEntity<Page<RequestBoardListDto>> getAllRequestBoards(@PageableDefault(sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
         return ResponseEntity.ok(requestBoardService.getAllRequestBoardList(pageable));
     }
 
     @PostMapping("/save")
-    public ResponseEntity<RequestBoardDto> saveRequestBoard(@RequestBody RequestBoardDto requestBoardDto) {
-        return ResponseEntity.ok(requestBoardService.saveRequestBoard(requestBoardDto));
+    public ResponseEntity<RequestBoardDto> saveRequestBoard(@RequestBody RequestBoardDto requestBoardDto, HttpSession httpSession) {
+        return ResponseEntity.ok(requestBoardService.saveRequestBoard(requestBoardDto, httpSession));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RequestBoardDto> getRequestBoard(@PathVariable("id") Long id) {
-        RequestBoardDto requestBoardDto = requestBoardService.getRequestBoardById(id);
+    public ResponseEntity<RequestBoardDto> getRequestBoard(@PathVariable("id") Long id, HttpSession httpSession) {
+        RequestBoardDto requestBoardDto = requestBoardService.getRequestBoardById(id, httpSession);
         return requestBoardDto != null ? ResponseEntity.ok(requestBoardDto) : ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<RequestBoardDto> updateRequestBoard(@RequestBody RequestBoardDto requestBoardDto) {
-        return ResponseEntity.ok(requestBoardService.updateRequestBoard(requestBoardDto));
+    public ResponseEntity<RequestBoardDto> updateRequestBoard(@RequestBody RequestBoardDto requestBoardDto, HttpSession httpSession) {
+        return ResponseEntity.ok(requestBoardService.updateRequestBoard(requestBoardDto, httpSession));
     }
 
     @PatchMapping("/update/state")
-    public ResponseEntity<RequestBoardDto> updateRequestBoardState(@RequestBody RequestBoardDto requestBoardDto) {
+    public ResponseEntity<String> updateRequestBoardState(@RequestBody RequestBoardDto requestBoardDto) {
         requestBoardService.updateRequestBoardState(requestBoardDto);
-        return ResponseEntity.ok(requestBoardService.getRequestBoardById(requestBoardDto.getId()));
+        return ResponseEntity.accepted().body("Update Success");
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteBoards(@RequestBody RequestBoardDto requestBoardDto) {
-        requestBoardService.deleteReqeuestBoardsByIds(requestBoardDto);
+    public ResponseEntity<Void> deleteBoards(@RequestBody RequestBoardDto requestBoardDto, HttpSession httpSession) {
+        requestBoardService.deleteReqeuestBoardsByIds(requestBoardDto, httpSession);
         return ResponseEntity.noContent().build();
     }
 }

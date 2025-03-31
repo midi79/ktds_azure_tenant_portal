@@ -30,7 +30,10 @@ const Header = () => {
                         {menu.title}
                     </span>
                 ))}
-            </nav>            
+            </nav>
+            <div className={styles.header__user}>
+                로그인 유저 : <span>김이박 책임(Cloud사업2팀)</span>
+            </div>  
         </header>
     );
 };

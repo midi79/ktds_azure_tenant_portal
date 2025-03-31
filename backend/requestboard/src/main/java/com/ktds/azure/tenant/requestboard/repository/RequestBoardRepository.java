@@ -15,7 +15,7 @@ public interface RequestBoardRepository extends JpaRepository<RequestBoard, Long
 
     @Modifying
     @Transactional
-    @Query("UPDATE RequestBoard board SET board.state = :state WHERE board.id = :id")
+    @Query("UPDATE RequestBoard board SET board.state =:state WHERE board.id = :id")
     void updateState(@Param("id") Long id, @Param("state") RequestBoardState state);
 
 }

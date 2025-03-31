@@ -28,7 +28,7 @@
     display: flex;
     justify-content: flex-start;
     gap: 30px;
-    padding: 25px 10px 5px 50px;
+    padding: 25px 10px 5px 80px;
     background-color: white;
 }
 
@@ -39,4 +39,15 @@
     padding-top: 5px;
     color: black;
     cursor: pointer;
+}
+
+.header__user {
+    display: flex;
+    flex-grow: 1;
+    justify-content: flex-end;     
+    padding: 30px 30px 0px 0px;
+}
+
+.header__user span {
+    font-weight: 600;
 }
