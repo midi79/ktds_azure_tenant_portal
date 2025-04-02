@@ -6,6 +6,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import org.hibernate.annotations.Comment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -14,11 +17,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-
+@Component
 public class JwtExtractionFilter extends OncePerRequestFilter {
-
     private static final String AUTH_HEADER = "Authorization";
-    private static final String JWT_SECRET = "${jwt.secret}"; // Use a secure key from properties
+    private String JWT_SECRET = null;
+
+    public JwtExtractionFilter(@Value("${jwt.secret}") String jwtSecret) {
+        this.JWT_SECRET = jwtSecret;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
