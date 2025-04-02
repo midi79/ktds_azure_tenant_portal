@@ -9,7 +9,6 @@ import RequestBoardEditPage from "./components/pages/requestboard/RequestBoardEd
 import RequestBoardViewPage from "./components/pages/requestboard/RequestBoardViewPage.tsx";
 import QnABoardListPage from "./components/pages/qnaboard/QnABoardListPage.tsx";
 import ErrorPage from "./components/pages/error/ErrorPage.tsx";
-import AppWrapper from "./components/common/util/AppWrapper.tsx";
 
 const router = createBrowserRouter([
     {
@@ -47,8 +46,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
-        <AppWrapper> 
-            <RouterProvider router={router} />
-        </AppWrapper> 
+        <RouterProvider router={router} />
     </QueryClientProvider>
 );
