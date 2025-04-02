@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.Cookie;
 import org.hibernate.annotations.Comment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 @Component
 public class JwtExtractionFilter extends OncePerRequestFilter {
-    private static final String AUTH_HEADER = "Authorization";
+    private static final String AUTH_COOKIE_NAME = "Authorization";
     private String JWT_SECRET = null;
 
     public JwtExtractionFilter(@Value("${jwt.secret}") String jwtSecret) {
@@ -30,7 +31,7 @@ public class JwtExtractionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String token = extractTokenFromRequest(request);
+        String token = extractTokenFromCookies(request);
 
         if (token != null) {
             try {
@@ -74,7 +75,14 @@ public class JwtExtractionFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String extractTokenFromRequest(HttpServletRequest request) {
-        return request.getHeader(AUTH_HEADER);
+    private String extractTokenFromCookies(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (AUTH_COOKIE_NAME.equals(cookie.getName())) {
+                    return cookie.getValue(); // Return JWT token from cookie
+                }
+            }
+        }
+        return null; // No valid cookie found
     }
 }
