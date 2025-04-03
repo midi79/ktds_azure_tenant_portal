@@ -1,6 +1,6 @@
 .board__edit__wrapper {
     width: 100vw;
-    height: 90vh;
+    height: 100vh;
 
     display: flex;
     flex-direction: column;
@@ -15,6 +15,7 @@
     justify-content: space-between;
     width: 900px;
     height: 75px;
+    margin-bottom: 5px;
 }
 
 .board__edit__header__left {
@@ -63,11 +64,11 @@
 
 /* colgroup col 클래스에 대한 스타일 */
 .board__edit__table .col-title {
-width: 20%; /* 제목 열 너비 */
+width: 24%; /* 제목 열 너비 */
 }
 
 .board__edit__table .col-content {
-width: 80%; /* 내용 열 너비 */
+width: 76%; /* 내용 열 너비 */
 }
 
 .board__edit__table td input,
@@ -76,6 +77,13 @@ width: 80%; /* 내용 열 너비 */
     width: 100%; /*input 등 내용 전체폭 맞춤*/
     box-sizing: border-box; /* padding, border 포함하여 width 계산 */
 }
+
+.board__edit__table__manager {
+    display: inline-flex;
+    gap: 10px; /* Adds space between the two inputs */    
+    border: none !important;
+}
+
 
 .board__edit__error {
     font-size: 18px;
@@ -119,7 +127,6 @@ width: 80%; /* 내용 열 너비 */
     font-weight: 600;
 }
 
-
 .board__date {
     display: flex;
     align-items: center;
@@ -155,3 +162,4 @@ width: 80%; /* 내용 열 너비 */
 .board__date button:hover {
     background-color: #0056b3;
 }
+

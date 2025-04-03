@@ -37,10 +37,10 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
 
     const navigate = useNavigate();
 
-    const stateAlias = [{ name: "SAVE", value: "저장"},
-        {name: "REQUEST", value: "등록"},
-        {name: "APPROVED", value: "승인"},
-        {name: "DENY", value: "반려"},
+    const stateAlias = [{ name: "SAVE", value: "임시저장", color:"green"},
+        {name: "REQUEST", value: "등록", color:"brown"},
+        {name: "APPROVED", value: "승인", color:"blue"},
+        {name: "DENY", value: "반려", color:"red"},
     ];
     
     const {
@@ -151,7 +151,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                         <td style={{textAlign:"center"}}>
                                             <DateTimeConverter date={item.createDate} />
                                         </td>
-                                        <td className={styles.td__state}>{stateAlias.find((state) => state.name === item.state)?.value }</td>
+                                        <td className={`${styles.td__state} ${styles[item.state]}`}>{stateAlias.find((state) => state.name === item.state)?.value }</td>
                                     </tr>
                                 ))}
                         </tbody>

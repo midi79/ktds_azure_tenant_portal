@@ -1,0 +1,27 @@
+.board__input__title__wrapper {
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    width: 100%;    
+}
+
+.board__input__title {
+    display: flex;
+    justify-content: flex-start; 
+}
+
+.board__input__title__required__field {    
+    color: rgb(151, 0, 0);
+}
+
+
+.board__input__img__wrapper {
+    margin-right: 10px;
+    margin-top: 5px;
+
+}
+.board__input__img__wrapper img {
+    width: 19px;
+    height: 19px;
+    object-fit: cover;                    
+}

@@ -5,10 +5,12 @@ import LongInput from "../../common/widget/LongInput";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { saveRequestBoard, getRequestBoard, updateRequestBoard, deleteRequestBoard } from "../../common/util/http";
+import infoIcon from "../../../assets/icons/information.svg";
 import RadioButton from "../../common/widget/RadioButton";
 import Checkbox from "../../common/widget/Checkbox";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
+import InputTitle from "../../common/widget/InputTitle";
 
 const RequestBoardEditPage = () => {
     const [showValidation, setShowValidation] = useState<boolean>(false);
@@ -24,7 +26,9 @@ const RequestBoardEditPage = () => {
         projectCode: "",
         purpose: "",
         budgetManager: "",
+        budgetManagerEmail: "",
         operationManager: "",
+        operationManagerEmail: "",
         budget: "",
         alertBudget: "",
         ipCount: ""
@@ -103,10 +107,20 @@ const RequestBoardEditPage = () => {
           setShowValidation(true);
           return false;
         }
+        if (!formData.budgetManagerEmail) {
+            setValidationMessage("예산 담당자 Email을 입력해주세요.");
+            setShowValidation(true);
+            return false;
+        }
         if (!formData.operationManager) {
           setValidationMessage("운영 담당자를 입력해주세요.");
           setShowValidation(true);
           return false;
+        }
+        if (!formData.operationManagerEmail) {
+            setValidationMessage("운영 담당자 Email을 입력해주세요.");
+            setShowValidation(true);
+            return false;
         }
         if (!formData.budget) {
           setValidationMessage("예산을 입력해주세요.");
@@ -123,7 +137,7 @@ const RequestBoardEditPage = () => {
             setShowValidation(true);
             return false;
         }
-        if (!formData.ipCount) {
+        if (selectedType === "workload" && !formData.ipCount) {
           setValidationMessage("필요 IP 수량을 입력해주세요.");
           setShowValidation(true);
           return false;
@@ -230,7 +244,9 @@ const RequestBoardEditPage = () => {
                 projectCode: data.projectCode || "",
                 purpose: data.purpose || "",
                 budgetManager: data.budgetManager || "",
+                budgetManagerEmail: data.budgetManagerEmail || "",
                 operationManager: data.operationManager || "",
+                operationManagerEmail: data.operationManagerEmail || "",
                 budget: data.budget || "",
                 alertBudget: data.alertBudget || "",
                 ipCount: data.ipCount || ""
@@ -245,6 +261,25 @@ const RequestBoardEditPage = () => {
         }
     }, [data]);
 
+
+    const titleDesc = {
+        tenant_type : "Sandbox : PoC를 위해 사용할 수 있는 Tenant <br> Workload : KT DS 대내외 서비스를 위한 Tenant",
+        projectName : "사용할 프로젝트명을 입력해주세요",
+        projectCode : "경영성과팀에서 비용심의 후 발행해준 코드를 입력해주세요",
+        budgetManager: "프로젝트 대표 빌링 담당자이며, <br> 프로젝트 예산에 맞게 Azure 사용료 관리",
+        operationManager: "프로젝트 대표 운영 담당자이며, <br> 프로젝트 멤버 권한 관리와 Azure 시스템 구축/운영 수행",
+        alertCheck : "월별 경보 수신을 희망할 경우만 선택 <br> (월별 균등하지 못한 금액의 경우는 월경보 발생 불가)", 
+        alertBudget : "월 경보 한도 금액을 설정하여 임계치 도달 시 <br> 운영 담당자에게 메일을 발송",
+        mng_group : "Private Spoke#1 : KT DS 내부망을 사용하는 서비스를 구성하고 운영 <br>" + 
+                    "Private Spoke#2 : KT 그룹사 공통으로 사용하는 서비스를 구성하고 운영 <br>" +
+                    "Public Spoke : 외부 인터넷 연결이 필요한 대외 서비스를 구성하고 운영",
+        ipCount : "기본적으로 할당되는 IP 대역은 26bit(64개) <br>" +
+                  " - IP 할당 수량은 PRD/DEV 포함 <br>" +
+                  " - PRD/DEV의 경우 동일 구독 내 Resource Group로 구분됨 <br>" +
+                  " - 이보다 큰 IP 대역이 필요하다면 사유 제출 필요",
+        budgetLink : "Azure 계산기로 계산한 결과에 대한 페이지 링크를 달아주세요"
+    }
+
     return (
         <form className={styles.board__edit__wrapper} onSubmit={onSubmitHandler}>
             <div className={styles.board__edit__header}>
@@ -253,7 +288,7 @@ const RequestBoardEditPage = () => {
                     <div className={styles.board__edit__error}>{showValidation && <div>{validationMessage}</div>}</div>
                 </div>
                 <div className={styles.board__edit__button}>
-                    <Button title="저장" type="button" onClickHandler={onSaveHandler}/>
+                    <Button title="임시저장" type="button" onClickHandler={onSaveHandler}/>
                     <Button title="신청" type="submit" />
                     { id && 
                         <Button title="삭제" type="button" onClickHandler={onDeleteHandler}/>
@@ -269,14 +304,14 @@ const RequestBoardEditPage = () => {
                     </colgroup>
                     <tbody>
                         <tr>
-                            <td>Tenant 타입</td>
+                            <td><InputTitle title="Tenant 타입" infoMessage={titleDesc.tenant_type} /></td>
                             <td>
                                 <RadioButton id="sandbox" label="SandBox" group="tenant_type" checkHandler={() => setSelectedType("sandbox")} isChecked={selectedType === "sandbox"} />
                                 <RadioButton id="workload" label="Workload" group="tenant_type" checkHandler={() => setSelectedType("workload")} isChecked={selectedType === "workload"} />
                             </td>
                         </tr>
                         <tr>
-                            <td>프로젝트명</td>
+                            <td><InputTitle title="프로젝트명" infoMessage={titleDesc.projectName} /></td>
                             <td>
                                 <LongInput
                                     type="text"
@@ -290,7 +325,7 @@ const RequestBoardEditPage = () => {
                         </tr>
                         {selectedType === "workload" && 
                             <tr>
-                                <td>프로젝트 코드</td>
+                                <td><InputTitle title="프로젝트 코드" infoMessage={titleDesc.projectCode} /></td>                                    
                                 <td>
                                     <LongInput
                                         type="text"
@@ -305,7 +340,7 @@ const RequestBoardEditPage = () => {
                         }
                         {selectedType === "workload" &&
                         <tr>
-                            <td>프로젝트 기간</td>
+                            <td><InputTitle title="프로젝트 기간" infoMessage="" /></td>
                             <td>
                                 <div className={styles.board__date}>
                                     <DatePicker
@@ -327,7 +362,7 @@ const RequestBoardEditPage = () => {
                         }
                         {selectedType === "sandbox" &&
                             <tr>
-                                <td>사용 목적</td>
+                                <td><InputTitle title="사용 목적" infoMessage="" /></td>
                                 <td>
                                     <LongInput
                                         type="text"
@@ -341,38 +376,58 @@ const RequestBoardEditPage = () => {
                             </tr>
                         }
                         <tr>
-                            <td>예산 담당자</td>
-                            <td>
+                            <td><InputTitle title="예산 담당자" infoMessage={titleDesc.budgetManager} /></td>
+                            <td className={styles.board__edit__table__manager}>
                                 <LongInput
                                     type="text"
                                     name="budgetManager"
-                                    placeholder="예산 담당자"
-                                    width={300}
+                                    placeholder="예산 담당자명"
+                                    width={200}
                                     defaultValue={data ? data.budgetManager : null}
                                     onChange={(e) => setFormData({...formData, budgetManager: e.target.value})}
                                 />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>운영 담당자</td>
-                            <td>
                                 <LongInput
                                     type="text"
-                                    name="operationManager"
-                                    placeholder="운영 담당자"
+                                    name="budgetManagerEmail"
+                                    placeholder="예산 담당자 Email"
                                     width={300}
-                                    defaultValue={data ? data.operationManager : null}
-                                    onChange={(e) => setFormData({...formData, operationManager: e.target.value})}
+                                    defaultValue={data ? data.budgetManagerEmail : null}
+                                    onChange={(e) => setFormData({...formData, budgetManagerEmail: e.target.value})}
                                 />
                             </td>
                         </tr>
                         <tr>
-                            <td>예산(원)</td>
+                            <td><InputTitle title="운영 담당자" infoMessage={titleDesc.operationManager} /></td>                            
+                            <td className={styles.board__edit__table__manager}>
+                                <>
+                                <LongInput
+                                    type="text"
+                                    name="operationManager"
+                                    placeholder="운영 담당자명"
+                                    width={200}
+                                    defaultValue={data ? data.operationManager : null}
+                                    onChange={(e) => setFormData({...formData, operationManager: e.target.value})}
+                                />
+                                </>
+                                <>
+                                <LongInput
+                                    type="text"
+                                    name="operationManagerEmail"
+                                    placeholder="운영 담당자 Email"
+                                    width={300}
+                                    defaultValue={data ? data.operationManagerEmail : null}
+                                    onChange={(e) => setFormData({...formData, operationManagerEmail: e.target.value})}
+                                />
+                                </>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><InputTitle title="총 예산(원)" infoMessage="" /></td>
                             <td>
                                 <LongInput
                                     type="text"
                                     name="budget"
-                                    placeholder="예산"
+                                    placeholder="총 예산"
                                     width={300}
                                     defaultValue={data ? data.budget : null}
                                     onChange={(e) => setFormData({...formData, budget: e.target.value})}
@@ -380,7 +435,7 @@ const RequestBoardEditPage = () => {
                             </td>
                         </tr>
                         <tr>
-                            <td>월 경보 희망여부</td>
+                            <td><InputTitle title="월 경보 희망여부" infoMessage={titleDesc.alertCheck} required={false}/></td>
                             <td>
                                 <Checkbox                                    
                                     checkHandler={onCheckboxHandler}                                    
@@ -390,7 +445,7 @@ const RequestBoardEditPage = () => {
                             </td>
                         </tr>
                         <tr>
-                            <td>월 경보 한도금액</td>
+                            <td><InputTitle title="월 경보 한도금액" infoMessage={titleDesc.alertBudget} required={isChecked}/></td>
                             <td>
                                 <LongInput
                                     type="text"
@@ -404,7 +459,7 @@ const RequestBoardEditPage = () => {
                         </tr>
                         {selectedType === "workload" &&
                             <tr>
-                                <td>Tanent 관리그룹</td>
+                                <td><InputTitle title="Tenant 관리그룹" infoMessage={titleDesc.mng_group} /></td>
                                 <td>
                                     <RadioButton id="private_spoke1" label="Private Spoke#1" group="mng_group" checkHandler={() => setSelectedMngGroup("private_spoke1")} isChecked={selectedMngGroup === "private_spoke1"}/>
                                     <RadioButton id="private_spoke2" label="Private Spoke#2" group="mng_group" checkHandler={() => setSelectedMngGroup("private_spoke2")} isChecked={selectedMngGroup === "private_spoke2"}/>
@@ -412,25 +467,33 @@ const RequestBoardEditPage = () => {
                                 </td>
                             </tr>
                         }
+                        {selectedType === "workload" &&
+                            <tr>
+                                <td><InputTitle title="필요 IP 수량" infoMessage={titleDesc.ipCount} /></td>
+                                <td>
+                                    <LongInput
+                                        type="text"
+                                        name="ipCount"
+                                        placeholder="필요 IP 수량"
+                                        width={200}
+                                        defaultValue={data ? data.ipCount : null}
+                                        onChange={(e) => setFormData({...formData, ipCount: e.target.value})}
+                                    />
+                                </td>                            
+                            </tr>
+                        }
                         <tr>
-                            <td>필요 IP 수량</td>
-                            <td>
-                                <LongInput
-                                    type="text"
-                                    name="ipCount"
-                                    placeholder="필요 IP 수량"
-                                    width={200}
-                                    defaultValue={data ? data.ipCount : null}
-                                    onChange={(e) => setFormData({...formData, ipCount: e.target.value})}
-                                />
-                            </td>                            
-                        </tr>
-                        <tr>
-                            <td>예산정보 링크</td>
+                            <td><InputTitle title="예산정보 링크" infoMessage={titleDesc.budgetLink} /></td>
                             <td>
                                 예산정보 링크
-                            </td>                            
-                        </tr>                        
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>요청사항</td>
+                            <td>
+                                <textarea />
+                            </td>
+                        </tr>
                     </tbody> 
                 </table>                
             </div>
