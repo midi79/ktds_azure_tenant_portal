@@ -177,8 +177,14 @@ const RequestBoardViewPage = () => {
                             <td>예산정보 링크</td>
                             <td>
                                 예산정보 링크
-                            </td>                            
-                        </tr>                        
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>요청사항</td>
+                            <td>
+                                요청사항 내용
+                            </td>
+                        </tr>
                     </tbody> 
                 </table>                
             </div>            

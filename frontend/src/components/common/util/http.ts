@@ -12,8 +12,8 @@ interface IPageProp {
     toDate: string | null;
 }
 
-//const BASE_URL = "http://localhost:8090";
-const BASE_URL = "http://atportal.cbiz.kubepia.net";
+const BASE_URL = "http://localhost:8090";
+//const BASE_URL = "http://atportal.cbiz.kubepia.net";
 
 export async function saveRequestBoard(data: any) {
     try {

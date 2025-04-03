@@ -1,3 +1,8 @@
+.SAVE { color: green; }
+.REQUEST { color: brown; }
+.APPROVED { color: blue; }
+.DENY { color: red; }
+
 .board__section {
     display: flex;
     justify-content: center;
@@ -5,7 +10,7 @@
     height: 80vh;
     background-color: white;
     border-top: 1px solid black;
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid black;
 }
 
 .board__wrapper {
