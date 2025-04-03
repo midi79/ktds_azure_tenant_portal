@@ -23,7 +23,9 @@ public class RequestBoardDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private String budgetManager;
+    private String budgetManagerEmail;
     private String operationManager;
+    private String operationManagerEmail;
     private Long budget;
     private Boolean alert;
     private Long alertBudget;
@@ -31,6 +33,8 @@ public class RequestBoardDto {
     private Long ipCount;
     private RequestBoardType type;
     private RequestBoardState state;
+    private String budgetLink;
+    private String request;
 
     @Override
     public String toString() {
@@ -44,7 +48,9 @@ public class RequestBoardDto {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", budgetManager='" + budgetManager + '\'' +
+                ", budgetManagerEmail='" + budgetManagerEmail + '\'' +
                 ", operationManager='" + operationManager + '\'' +
+                ", operationManagerEmail='" + operationManagerEmail + '\'' +
                 ", budget=" + budget +
                 ", alert=" + alert +
                 ", alertBudget=" + alertBudget +
@@ -52,6 +58,8 @@ public class RequestBoardDto {
                 ", ipCount=" + ipCount +
                 ", type=" + type +
                 ", state=" + state +
+                ", budgetLink='" + budgetLink + '\'' +
+                ", request='" + request + '\'' +
                 '}';
     }
 }

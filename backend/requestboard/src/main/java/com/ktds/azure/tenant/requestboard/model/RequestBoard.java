@@ -34,10 +34,10 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
     @Column
     private String projectCode;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     private String projectName;
 
-    @Column
+    @Column(length = 1000)
     private String purpose;
 
     @Column
@@ -50,7 +50,13 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
     private String budgetManager;
 
     @Column
+    private String budgetManagerEmail;
+
+    @Column
     private String operationManager;
+
+    @Column
+    private String operationManagerEmail;
 
     @Column
     private Long budget;
@@ -74,4 +80,10 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
     @Column
     @Enumerated(EnumType.STRING)
     private RequestBoardState state;
+
+    @Column(length = 500)
+    private String budgetLink;
+
+    @Column(length = 4000)
+    private String request;
 }

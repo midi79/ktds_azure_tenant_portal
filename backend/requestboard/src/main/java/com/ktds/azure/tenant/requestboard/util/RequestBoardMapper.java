@@ -51,7 +51,9 @@ public class RequestBoardMapper {
         board.setStartDate(requestBoardDto.getStartDate());
         board.setEndDate(requestBoardDto.getEndDate());
         board.setBudgetManager(requestBoardDto.getBudgetManager());
+        board.setBudgetManagerEmail(requestBoardDto.getBudgetManagerEmail());
         board.setOperationManager(requestBoardDto.getOperationManager());
+        board.setOperationManagerEmail(requestBoardDto.getOperationManagerEmail());
         board.setBudget(requestBoardDto.getBudget());
         board.setAlert(requestBoardDto.getAlert());
         board.setAlertBudget(requestBoardDto.getAlertBudget());
@@ -59,6 +61,8 @@ public class RequestBoardMapper {
         board.setIpCount(requestBoardDto.getIpCount());
         board.setType(requestBoardDto.getType());
         board.setState(requestBoardDto.getState());
+        board.setBudgetLink(requestBoardDto.getBudgetLink());
+        board.setRequest(requestBoardDto.getRequest());
 
         return board;
     }
@@ -77,14 +81,18 @@ public class RequestBoardMapper {
                 board.getStartDate(),
                 board.getEndDate(),
                 board.getBudgetManager(),
+                board.getBudgetManagerEmail(),
                 board.getOperationManager(),
+                board.getOperationManagerEmail(),
                 board.getBudget(),
                 board.getAlert(),
                 board.getAlertBudget(),
                 board.getManagementGroup(),
                 board.getIpCount(),
                 board.getType(),
-                board.getState()
+                board.getState(),
+                board.getBudgetLink(),
+                board.getRequest()
                 );
     }
 }

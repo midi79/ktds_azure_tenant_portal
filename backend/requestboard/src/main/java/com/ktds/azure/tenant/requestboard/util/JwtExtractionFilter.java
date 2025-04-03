@@ -66,6 +66,11 @@ public class JwtExtractionFilter extends OncePerRequestFilter {
             }
         } else {
             // No token found, you can either continue or return error based on your requirements
+            // Create a user object if you prefer
+//            HttpSession session = request.getSession();
+//            UserInfo userInfo = new UserInfo("Anderson", "anderson@kt.com", "ROLE_USER");
+//            session.setAttribute("userInfo", userInfo);
+
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("{\"success\": false, \"message\": \"No token provided\"}");
             response.setContentType("application/json");

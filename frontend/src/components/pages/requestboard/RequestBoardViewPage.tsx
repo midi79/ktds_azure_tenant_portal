@@ -11,7 +11,7 @@ const RequestBoardViewPage = () => {
     const { id } = useParams();
 
     const { data, isError, error } = useQuery({
-        queryKey: ["request", id],
+        queryKey: ["requestBoard", id],
         queryFn: () => getRequestBoard(id),
     });
 
@@ -128,13 +128,13 @@ const RequestBoardViewPage = () => {
                         <tr>
                             <td>예산 담당자</td>
                             <td>
-                                {data ? data.budgetManager : null}                                
+                                {data ? data.budgetManager : null} ({data ? data.budgetManagerEmail : null})
                             </td>
                         </tr>
                         <tr>
                             <td>운영 담당자</td>
                             <td>
-                                {data ? data.operationManager : null}                                                                    
+                                {data ? data.operationManager : null} ({data ? data.operationManagerEmail : null})
                             </td>
                         </tr>
                         <tr>
@@ -167,22 +167,24 @@ const RequestBoardViewPage = () => {
                                 </td>
                             </tr>
                         }
-                        <tr>
-                            <td>필요 IP 수량</td>
-                            <td>
-                                {data ? data.ipCount : null}
-                            </td>                            
-                        </tr>
+                        {data && data.type === "WORKLOAD" &&
+                            <tr>
+                                <td>필요 IP 수량</td>
+                                <td>
+                                    {data ? data.ipCount : null}
+                                </td>                            
+                            </tr>
+                        }
                         <tr>
                             <td>예산정보 링크</td>
                             <td>
-                                예산정보 링크
+                                <a href={data ? data.budgetLink : null} target="_blank" rel="noopener noreferrer">{data ? data.budgetLink : null}</a>                       
                             </td>
                         </tr>
                         <tr>
                             <td>요청사항</td>
                             <td>
-                                요청사항 내용
+                                {data ? data.request : null}
                             </td>
                         </tr>
                     </tbody> 

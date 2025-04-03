@@ -32,7 +32,9 @@ const RequestBoardEditPage = () => {
         operationManagerEmail: "",
         budget: "",
         alertBudget: "",
-        ipCount: ""
+        ipCount: "",
+        budgetLink: "",
+        request: "",
     });
 
     const navigate = useNavigate();
@@ -143,6 +145,11 @@ const RequestBoardEditPage = () => {
           setShowValidation(true);
           return false;
         }
+        if (!formData.budgetLink) {
+            setValidationMessage("예산정보 링크를 입력해주세요.");
+            setShowValidation(true);
+            return false;
+        }
 
         return true;
     };
@@ -250,7 +257,9 @@ const RequestBoardEditPage = () => {
                 operationManagerEmail: data.operationManagerEmail || "",
                 budget: data.budget || "",
                 alertBudget: data.alertBudget || "",
-                ipCount: data.ipCount || ""
+                ipCount: data.ipCount || "",
+                budgetLink: data.budgetLink || "",
+                request: data.request || "",
             });
 
             setId(data.id || null);
@@ -486,13 +495,26 @@ const RequestBoardEditPage = () => {
                         <tr>
                             <td><InputTitle title="예산정보 링크" infoMessage={titleDesc.budgetLink} /></td>
                             <td>
-                                예산정보 링크
-                            </td>
+                                <LongInput
+                                        type="text"
+                                        name="budgetLink"
+                                        placeholder="예산정보 링크"
+                                        width={640}
+                                        defaultValue={data ? data.budgetLink : null}
+                                        onChange={(e) => setFormData({...formData, budgetLink: e.target.value})}
+                                />
+                            </td>                            
                         </tr>
                         <tr>
                             <td>요청사항</td>
                             <td>
-                                <textarea />
+                                <textarea 
+                                    name="request"
+                                    defaultValue={data ? data.request : null}
+                                    rows={3}
+                                    cols={30}
+                                    onChange={(e) => setFormData({...formData, request: e.target.value})}
+                                />
                             </td>
                         </tr>
                     </tbody> 
