@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import ktdsLogoImage from "../../../assets/images/ktdslogo.png";
+import { useQuery } from "@tanstack/react-query";
+import { getUserInfo } from "../util/http";
+import { useEffect } from "react";
+import useUserInfo from "../store/user";
 
 const Header = () => {
     const navigate = useNavigate();
@@ -8,7 +12,15 @@ const Header = () => {
                    {"url":"request", "title":"신청"}, 
                    {"url":"qna", "title":"Q&A"}
                 ];
-    
+
+    const { user, setUser } = useUserInfo();
+
+    const { data : userInfo, error, isLoading } = useQuery({
+        queryKey: ["userInfo"],
+        queryFn: getUserInfo,        
+    });
+
+
     const onTitleClickHandler = (): void => {
         navigate("/");
     };
@@ -17,6 +29,10 @@ const Header = () => {
         const page = menu.toLowerCase();
         navigate(`/pages/${page}`);
     };
+
+    useEffect(() => {
+        if (userInfo) setUser(userInfo);
+    }, [userInfo, setUser]);
 
     return (
         <header className={styles.header__wrapper}>
@@ -32,8 +48,10 @@ const Header = () => {
                 ))}
             </nav>
             <div className={styles.header__user}>
-                로그인 유저 : <span>김이박 책임(Cloud사업2팀)</span>
+                로그인 유저 :ㅤ<span>{user?.name}</span>
             </div>  
+            {isLoading && <p>Loading...</p>}
+            {error && <p>Error loading user data</p>}
         </header>
     );
 };

@@ -12,8 +12,33 @@ interface IPageProp {
     toDate: string | null;
 }
 
-//const BASE_URL = "http://localhost:8090";
-const BASE_URL = "https://atportal.cbiz.kubepia.net";
+const ENV = import.meta.env.VITE_ENV;
+let BASE_URL = "http://localhost:8090";
+
+if (ENV === "dev" || ENV === "prd") {
+    BASE_URL = import.meta.env.VITE_API_URL;
+}
+    
+console.log("BASE_URL", BASE_URL);
+
+
+export async function getUserInfo() {
+    try {
+        const response = await axios.get(BASE_URL + "/dash/api/v1/request-board/user", { withCredentials: true });
+
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            throw new Error(`Unexpected status: ${response.status}`);
+        }
+    } catch (error: any) {
+        throw new Error(
+            axios.isAxiosError(error) && error.response
+                ? error.response.data
+                : "An error occurred while fetching user data"
+        );
+    }
+}
 
 export async function saveRequestBoard(data: any) {
     try {

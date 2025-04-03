@@ -5,12 +5,12 @@ import LongInput from "../../common/widget/LongInput";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { saveRequestBoard, getRequestBoard, updateRequestBoard, deleteRequestBoard } from "../../common/util/http";
-import infoIcon from "../../../assets/icons/information.svg";
 import RadioButton from "../../common/widget/RadioButton";
 import Checkbox from "../../common/widget/Checkbox";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import InputTitle from "../../common/widget/InputTitle";
+import useUserInfo from "../../common/store/user";
 
 const RequestBoardEditPage = () => {
     const [showValidation, setShowValidation] = useState<boolean>(false);
@@ -21,6 +21,7 @@ const RequestBoardEditPage = () => {
     const [selectedType, setSelectedType] = useState("sandbox");
     const [selectedMngGroup, setSelectedMngGroup] = useState<string>("");
     const [isChecked, setIsChecked] = useState(false);    
+    const {user} = useUserInfo();
     const [formData, setFormData] = useState({
         projectName: "",
         projectCode: "",
@@ -164,7 +165,7 @@ const RequestBoardEditPage = () => {
             startDate,
             endDate,
             managementGroup : selectedMngGroup,       
-            writer : "김이박 책임",
+            writer : user?.name,
             state : "SAVE",
             id: id ? id : null,
         };
@@ -192,7 +193,7 @@ const RequestBoardEditPage = () => {
             startDate,
             endDate,
             managementGroup : selectedMngGroup,       
-            writer : "김이박 책임",
+            writer : user?.name,
             state : "REQUEST",
             id: id ? id : null,
         };  
