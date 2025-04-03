@@ -23,7 +23,7 @@ public class JwtExtractionFilter extends OncePerRequestFilter {
     private static final String AUTH_COOKIE_NAME = "Authorization";
     private String JWT_SECRET = null;
 
-    public JwtExtractionFilter(@Value("${jwt.secret}") String jwtSecret) {
+    public JwtExtractionFilter(@Value("${JWT_SECRET}") String jwtSecret) {
         this.JWT_SECRET = jwtSecret;
     }
 
@@ -37,7 +37,7 @@ public class JwtExtractionFilter extends OncePerRequestFilter {
             try {
                 // Extract claims from token
                 Claims claims = Jwts.parser()
-                        .setSigningKey(JWT_SECRET)
+                        .setSigningKey(JWT_SECRET.getBytes())
                         .parseClaimsJws(token)
                         .getBody();
 
