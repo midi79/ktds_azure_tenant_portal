@@ -1,37 +1,32 @@
 import styles from "./QnAFormPage.module.css";
-
 import { useEffect, useState } from "react";
 import Button from "../../common/widget/Button";
 import LongInput from "../../common/widget/LongInput";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
-  saveRequestBoard,
-  getRequestBoard,
-  updateRequestBoard,
-  deleteRequestBoard,
-} from "../../common/util/http";
+  saveQnABoard,
+  getQnABoard,
+  updateQnABoard,
+  deleteQnABoard,
+} from "../../common/util/qnaHttp";
 import RadioButton from "../../common/widget/RadioButton";
 import Tiptap from "../../common/editor/TiptapEditor";
+import useUserInfo from "../../common/store/user";
 
 const QnAFormPage = () => {
   const [showValidation, setShowValidation] = useState<boolean>(false);
   const [validationMessage, setValidationMessage] = useState<string>("");
   const [id, setId] = useState<string | null>(null);
-  const [startDate, setStartDate] = useState<any>(null);
-  const [endDate, setEndDate] = useState<any>(null);
   const [selectedType, setSelectedType] = useState("sandbox");
-  const [selectedMngGroup, setSelectedMngGroup] = useState<string>("");
-  const [isChecked, setIsChecked] = useState(false);
+  const { user } = useUserInfo();
   const [formData, setFormData] = useState({
+    title: "",
     projectName: "",
     projectCode: "",
-    purpose: "",
-    budgetManager: "",
-    operationManager: "",
-    budget: "",
-    alertBudget: "",
-    ipCount: "",
+    type: "",
+    content: "",
+    answer: "",
   });
 
   const navigate = useNavigate();
@@ -42,8 +37,8 @@ const QnAFormPage = () => {
     isError: isBoardError,
     error: boardError,
   } = useQuery({
-    queryKey: ["request", id],
-    queryFn: () => getRequestBoard(id),
+    queryKey: ["qnaboard", id],
+    queryFn: () => getQnABoard(id),
     enabled: id ? true : false,
   });
 
@@ -52,11 +47,10 @@ const QnAFormPage = () => {
     isError,
     error,
   } = useMutation({
-    mutationFn: saveRequestBoard,
+    mutationFn: saveQnABoard,
     onSuccess: () => {
       alert("정상적으로 저장되었습니다");
-      queryClient.invalidateQueries({ queryKey: ["boards"] });
-      navigate("/pages/request");
+      navigate("/pages/qna");
     },
   });
 
@@ -65,7 +59,7 @@ const QnAFormPage = () => {
     isError: isUpdateError,
     error: updateError,
   } = useMutation({
-    mutationFn: updateRequestBoard,
+    mutationFn: updateQnABoard,
     onSuccess: () => {
       alert("정상적으로 수행되었습니다");
       navigate("/pages/qna");
@@ -77,7 +71,7 @@ const QnAFormPage = () => {
     isError: isDeleteError,
     error: deleteError,
   } = useMutation({
-    mutationFn: deleteRequestBoard,
+    mutationFn: deleteQnABoard,
     onSuccess: () => {
       alert("정상적으로 삭제되었습니다");
       navigate("/pages/qna");
@@ -95,47 +89,11 @@ const QnAFormPage = () => {
       setShowValidation(true);
       return false;
     }
-    if (selectedType === "workload" && (!startDate || !endDate)) {
-      setValidationMessage("프로젝트 기간을 선택해주세요.");
-      setShowValidation(true);
-      return false;
-    }
-    if (selectedType === "sandbox" && !formData.purpose) {
-      setValidationMessage("사용 목적을 입력해주세요.");
-      setShowValidation(true);
-      return false;
-    }
-    if (!formData.budgetManager) {
-      setValidationMessage("예산 담당자를 입력해주세요.");
-      setShowValidation(true);
-      return false;
-    }
-    if (!formData.operationManager) {
-      setValidationMessage("운영 담당자를 입력해주세요.");
-      setShowValidation(true);
-      return false;
-    }
-    if (!formData.budget) {
-      setValidationMessage("예산을 입력해주세요.");
-      setShowValidation(true);
-      return false;
-    }
-    if (isChecked && !formData.alertBudget) {
-      setValidationMessage("월 경보 한도금액을 입력해주세요.");
-      setShowValidation(true);
-      return false;
-    }
-    if (selectedType === "workload" && !selectedMngGroup) {
-      setValidationMessage("Tanent 관리그룹을 선택해주세요.");
-      setShowValidation(true);
-      return false;
-    }
-    if (!formData.ipCount) {
-      setValidationMessage("필요 IP 수량을 입력해주세요.");
-      setShowValidation(true);
-      return false;
-    }
-
+    // if (!formData.content) {
+    //   setValidationMessage("질문 내용을 입력해주세요.");
+    //   setShowValidation(true);
+    //   return false;
+    // }
     return true;
   };
 
@@ -153,11 +111,8 @@ const QnAFormPage = () => {
     const data = {
       ...formData,
       type: selectedType.toUpperCase(),
-      alert: isChecked,
-      startDate,
-      endDate,
-      managementGroup: selectedMngGroup,
-      writer: "김이박 책임",
+      // writer: user?.name,
+      writer: "테스트유저",
       state: "SAVE",
       id: id ? id : null,
     };
@@ -181,11 +136,8 @@ const QnAFormPage = () => {
     const data = {
       ...formData,
       type: selectedType.toUpperCase(),
-      alert: isChecked,
-      startDate,
-      endDate,
-      managementGroup: selectedMngGroup,
-      writer: "김이박 책임",
+      //writer: user?.name,
+      writer: "테스트",
       state: "REQUEST",
       id: id ? id : null,
     };
@@ -217,10 +169,6 @@ const QnAFormPage = () => {
     }
   };
 
-  const onCheckboxHandler = () => {
-    setIsChecked(!isChecked);
-  };
-
   useEffect(() => {
     if (params && params.id) {
       setId(params.id);
@@ -230,22 +178,15 @@ const QnAFormPage = () => {
   useEffect(() => {
     if (data) {
       setFormData({
+        title: data.title || "",
         projectName: data.projectName || "",
         projectCode: data.projectCode || "",
-        purpose: data.purpose || "",
-        budgetManager: data.budgetManager || "",
-        operationManager: data.operationManager || "",
-        budget: data.budget || "",
-        alertBudget: data.alertBudget || "",
-        ipCount: data.ipCount || "",
+        type: data.type || "",
+        content: data.content || "",
+        answer: data.answer || "",
       });
 
       setId(data.id || null);
-      setSelectedType(data.type?.toLowerCase() || "sandbox");
-      setSelectedMngGroup(data.managementGroup || "");
-      setIsChecked(data.alert || false);
-      setStartDate(data.startDate ? new Date(data.startDate) : null);
-      setEndDate(data.endDate ? new Date(data.endDate) : null);
     }
   }, [data]);
 
@@ -284,6 +225,21 @@ const QnAFormPage = () => {
             <col className={styles["col-content"]} />
           </colgroup>
           <tbody>
+            <tr>
+              <td>질문 내용</td>
+              <td>
+                <LongInput
+                  type="text"
+                  name="title"
+                  placeholder="프로젝트명"
+                  width={500}
+                  defaultValue={data ? data.title : null}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                />
+              </td>
+            </tr>
             <tr>
               <td>Tenant 타입</td>
               <td>

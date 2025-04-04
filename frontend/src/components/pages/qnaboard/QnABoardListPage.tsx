@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
-// import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import IconButton from "../../common/widget/IconButton";
 import { DateTimeConverter } from "../../common/util/datetime";
 import newIcon from "../../../assets/icons/note_add.svg";
-// import { getRequestBoards } from "../../common/util/http";
+import { getQnABoards } from "../../common/util/qnaHttp";
 import Button from "../../common/widget/Button";
 import { format } from "date-fns";
 
@@ -17,48 +17,17 @@ interface IBoardList {
   title: string; // 글 이름
   writer: string; // 작성자 (질문자)
   createDate: Date; // 작성일 or 최종 수정일
-  state: string; // 상태 | 답변완료 or 답변 대기중
+  state: string; // 상태
 }
 
-// interface ITestProp {
-//   testData?: IBoardList[];
-// }
-
-// 여기부터 mock data
-const testData: IBoardList[] = [
-  {
-    id: 1,
-    title: "이 서비스는 어떻게 이용하나요?",
-    writer: "장선후후후1",
-    createDate: new Date(),
-    state: "PENDING",
-  },
-  {
-    id: 2,
-    title: "관리자님 질문 있습니다!",
-    writer: "장선후후후2",
-    createDate: new Date(),
-    state: "ANSWERED",
-  },
-];
-
-const boardList = {
-  // mock data
-  content: testData,
-  totalPages: 1,
-};
-
-const isListLoading = false;
-const isListError = false;
-const listError = new Error(""); // 필요 시 message 직접 지정 가능
-const listRefetch = () => {}; // 빈 함수 처리 (버튼 클릭 시 에러 안 나게)
-// 여기까지 mockdata
+interface ITestProp {
+  testData?: IBoardList[];
+}
 
 const listTitle: string[] = ["번호", "제목", "작성자", "작성일시", "상태"];
 
 const QnABoardListPage = () => {
-  //const [boardListData, setBoardListData] = useState<IBoardList[]>([]);
-  const [boardListData, setBoardListData] = useState<IBoardList[]>(testData); //mock data 넣기
+  const [boardListData, setBoardListData] = useState<IBoardList[]>([]);
 
   const [size, setSize] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
@@ -71,37 +40,35 @@ const QnABoardListPage = () => {
   const navigate = useNavigate();
 
   const stateAlias = [
-    { name: "PENDING", value: "답변대기" },
-    { name: "ANSWERED", value: "답변완료" },
+    { name: "SAVE", value: "임시저장", color: "green" },
+    { name: "ANSWERED", value: "답변완료", color: "blue" },
+    { name: "REQUEST", value: "답변대기", color: "brown" },
   ];
 
-  //   const {
-  //     data: boardList,
-  //     isLoading: isListLoading,
-  //     isError: isListError,
-  //     error: listError,
-  //     refetch: listRefetch,
-  //   } = useQuery({
-  //     queryKey: ["request", page, size],
-  //     queryFn: () =>
-  //       getRequestBoards({
-  //         size,
-  //         page,
-  //         searchOption,
-  //         searchTerm,
-  //         fromDate,
-  //         toDate,
-  //       }),
-  //     enabled: true,
-  //   });
+  const {
+    data: boardList,
+    isLoading: isListLoading,
+    isError: isListError,
+    error: listError,
+    refetch: listRefetch,
+  } = useQuery({
+    queryKey: ["qna", page, size],
+    queryFn: () =>
+      getQnABoards({
+        size,
+        page,
+        searchOption,
+        searchTerm,
+        fromDate,
+        toDate,
+      }),
+    enabled: true,
+  });
 
   useEffect(() => {
     if (boardList?.content) {
       setBoardListData(boardList.content);
       setTotalPages(boardList.totalPages);
-    }
-    if (testData) {
-      setBoardListData(testData);
     }
   }, [boardList]);
 
@@ -110,7 +77,7 @@ const QnABoardListPage = () => {
   };
 
   const onTitleClickHandler = (item: IBoardList) => {
-    if (item.state === "SAVE" || item.state === "DENY") {
+    if (item.state === "SAVE") {
       navigate(`/pages/qna/edit/${item.id}`);
     } else {
       navigate(`/pages/qna/view/${item.id}`);
@@ -196,11 +163,11 @@ const QnABoardListPage = () => {
                     >
                       {item.title}
                     </td>
-                    <td>{item.writer}</td>
-                    <td className={styles.td__date}>
+                    <td style={{ textAlign: "center" }}>{item.writer}</td>
+                    <td style={{ textAlign: "center" }}>
                       <DateTimeConverter date={item.createDate} />
                     </td>
-                    <td className={styles.td__state}>
+                    <td className={`${styles.td__state} ${styles[item.state]}`}>
                       {
                         stateAlias.find((state) => state.name === item.state)
                           ?.value

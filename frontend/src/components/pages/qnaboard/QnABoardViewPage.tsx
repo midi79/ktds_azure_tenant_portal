@@ -3,82 +3,35 @@ import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../common/widget/Button";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import {
-  getRequestBoard,
-  updateRequestBoardState,
-} from "../../common/util/http";
+import { getQnABoard, updateQnABoardAnswer } from "../../common/util/qnaHttp";
 
 import Textarea from "../../common/widget/Textarea";
-
-// mock data 구조 정의
-interface IRequestBoard {
-  id: number;
-  title: string;
-  writer: string;
-  createDate: Date;
-  state: "PENDING" | "ANSWERED"; // 수정 단계, 저장 단계 추가
-  purpose: "WORKLOAD" | "SANDBOX";
-  projectName: string;
-  projectCode: string;
-  content: string;
-  answer: string;
-}
-
-const mockRequestBoards: Record<string, IRequestBoard> = {
-  "1": {
-    id: 1,
-    title: "이 서비스는 어떻게 이용하나요?",
-    writer: "장선후후후1",
-    createDate: new Date("2024-12-01T10:00:00"),
-    state: "PENDING",
-    purpose: "WORKLOAD",
-    projectName: "KTDS Azure 테넌트 포탈",
-    projectCode: "AZ-PT-001",
-    content: "<h1>긴급합니다.</h1><p>Azure가 뭐에요?</p>",
-    answer: "",
-  },
-  "2": {
-    id: 2,
-    title: "관리자님 질문 있습니다!",
-    writer: "장선후후후2",
-    createDate: new Date("2025-01-15T14:30:00"),
-    state: "ANSWERED",
-    purpose: "SANDBOX",
-    projectName: "기획서 자동화",
-    projectCode: "AZ-PL-002",
-    content: "<p>리소스를 더 할당해 주세요.</p>",
-    answer: "<p>넵. 조치 완료했습니다.</p>",
-  },
-};
-// 여기까지 삭제해야 해요
 
 const QnABoardViewPage = () => {
   const navigate = useNavigate();
 
-  // const { id } = useParams();
+  const { id } = useParams();
 
-  // const { data, isError, error } = useQuery({
-  //   queryKey: ["request", id],
-  //   queryFn: () => getRequestBoard(id),
-  // });
+  const { data, isError, error } = useQuery({
+    queryKey: ["request", id],
+    queryFn: () => getQnABoard(id),
+  });
 
-  // 여기부터 mockdata
-  const { id } = useParams<{ id: string }>();
   const [showEditor, setShowEditor] = useState(false);
-
-  const data = id ? mockRequestBoards[id] : undefined;
-  const isError = !data;
-  const error = isError ? new Error("데이터를 찾을 수 없습니다.") : null;
+  const [answerData, setAnswerData] = useState("");
 
   const {
     mutate: updateMutate,
     isError: isUpdateError,
     error: updateError,
   } = useMutation({
-    mutationFn: updateRequestBoardState,
+    mutationFn: updateQnABoardAnswer,
     onSuccess: () => {
       alert("정상적으로 수행되었습니다");
       navigate("/pages/qna");
+    },
+    onError: (error) => {
+      console.error((error as Error).message);
     },
   });
 
@@ -88,17 +41,13 @@ const QnABoardViewPage = () => {
     }
   };
 
-  const onAnswerClickHandler = () => {
+  const onAnswerUpdateHandler = () => {
     if (confirm("답변 하시겠습니까?")) {
       setShowEditor(false);
-    }
-  };
 
-  const onApproveHandler = () => {
-    if (confirm("승인 하시겠습니까?")) {
       const data = {
         id: id,
-        state: "APPROVED",
+        answer: answerData,
       };
 
       updateMutate({ board: data });
@@ -114,12 +63,12 @@ const QnABoardViewPage = () => {
           </div>
         </div>
         <div className={styles.board__view__button}>
-          {data && data.state === "PENDING" && (
+          {data && data.state === "REQUEST" && (
             <>
               <Button
                 title="수정하기"
                 type="button"
-                onClickHandler={onAnswerClickHandler}
+                onClickHandler={onAnswerUpdateHandler}
               />
             </>
           )}
@@ -144,19 +93,21 @@ const QnABoardViewPage = () => {
             <tr>
               <td>작성자</td>
               <td>{data ? data.writer : null}</td>
-            </tr>{" "}
+            </tr>
             <tr>
-              <td>프로젝트 목적</td>
-              <td>{data ? data.purpose : null}</td>
+              <td>Tenant 타입</td>
+              <td>{data ? data.type : null}</td>
             </tr>
             <tr>
               <td>프로젝트명</td>
               <td>{data ? data.projectName : null}</td>
             </tr>
-            <tr>
-              <td>프로젝트 코드</td>
-              <td>{data ? data.projectCode : null}</td>
-            </tr>
+            {data && data.type === "WORKLOAD" && (
+              <tr>
+                <td>프로젝트 코드</td>
+                <td>{data ? data.projectCode : null}</td>
+              </tr>
+            )}
             <tr>
               <td>질문 내용</td>
               <td dangerouslySetInnerHTML={{ __html: data?.content || "" }} />
@@ -172,7 +123,7 @@ const QnABoardViewPage = () => {
               </div>
             </div>
             <div className={styles.board__view__button}>
-              {data && data.state === "PENDING" && !showEditor && (
+              {data && data.state === "REQUEST" && !showEditor && (
                 <>
                   <Button
                     title="답변하기"
@@ -181,12 +132,17 @@ const QnABoardViewPage = () => {
                   />
                 </>
               )}
-              {data && data.state === "PENDING" && showEditor && (
+              {data && data.state === "REQUEST" && showEditor && (
                 <>
                   <Button
                     title="제출하기"
                     type="button"
-                    onClickHandler={onAnswerClickHandler}
+                    onClickHandler={onAnswerUpdateHandler}
+                  />
+                  <Button
+                    title="취소하기"
+                    type="button"
+                    onClickHandler={() => setShowEditor(false)}
                   />
                 </>
               )}
@@ -205,17 +161,18 @@ const QnABoardViewPage = () => {
                   <td dangerouslySetInnerHTML={{ __html: data.answer }} />
                 )}
 
-                {data?.state === "PENDING" && !showEditor && (
+                {data?.state === "REQUEST" && !showEditor && (
                   <td> 관리자가 아직 답변하지 않았습니다. </td>
                 )}
 
-                {data?.state === "PENDING" && showEditor && (
+                {data?.state === "REQUEST" && showEditor && (
                   <td>
                     <Textarea
                       name="content"
                       placeholder="답변을 입력해주세요"
                       width={500}
                       defaultValue=""
+                      onChange={(e) => setAnswerData(e.target.value)}
                     />
                   </td>
                 )}
