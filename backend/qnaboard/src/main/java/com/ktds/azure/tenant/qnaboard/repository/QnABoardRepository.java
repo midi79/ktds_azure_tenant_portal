@@ -14,13 +14,8 @@ public interface QnABoardRepository extends JpaRepository<QnABoard, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE QnABoard board SET board.state =:state WHERE board.id = :id")
-    void updateState(@Param("id") Long id, @Param("state") QnABoardState state);
-
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE QnABoard board SET board.answer =:answer WHERE board.id = :id")
-    void updateAnswer(@Param("id") Long id, @Param("answer") String answer);
-
+    @Query("UPDATE QnABoard board SET board.answer = :answer, board.state = :state WHERE board.id = :id")
+    void updateAnswerAndState(@Param("id") Long id,
+                              @Param("answer") String answer,
+                              @Param("state") QnABoardState state);
 }

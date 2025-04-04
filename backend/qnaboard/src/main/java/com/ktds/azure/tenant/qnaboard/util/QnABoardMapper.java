@@ -37,7 +37,6 @@ public class QnABoardMapper {
         qnABoardDto.setWriter(qnABoard.getWriter());
         qnABoardDto.setProjectCode(qnABoard.getProjectCode());
         qnABoardDto.setProjectName(qnABoard.getProjectName());
-        qnABoardDto.setPurpose(qnABoard.getPurpose());
         qnABoardDto.setContent(qnABoard.getContent());
         qnABoardDto.setAnswer(qnABoard.getAnswer());
         qnABoardDto.setType(qnABoard.getType());

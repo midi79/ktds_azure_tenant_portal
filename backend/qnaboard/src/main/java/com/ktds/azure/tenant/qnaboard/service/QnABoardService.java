@@ -3,6 +3,7 @@ package com.ktds.azure.tenant.qnaboard.service;
 import com.ktds.azure.tenant.qnaboard.dto.QnABoardDto;
 import com.ktds.azure.tenant.qnaboard.dto.QnABoardListDto;
 import com.ktds.azure.tenant.qnaboard.model.QnABoard;
+import com.ktds.azure.tenant.qnaboard.model.QnABoardState;
 import com.ktds.azure.tenant.qnaboard.repository.QnABoardRepository;
 import com.ktds.azure.tenant.qnaboard.util.QnABoardMapper;
 import jakarta.servlet.http.HttpSession;
@@ -48,12 +49,8 @@ public class QnABoardService {
         return QnABoardMapper.toDto(qnABoardRepository.save(QnABoardMapper.toEntity(qnABoardDto)));
     }
 
-    public void updateQnABoardState(QnABoardDto qnABoardDto) {
-        qnABoardRepository.updateState(qnABoardDto.getId(), qnABoardDto.getState());
-    }
-
     public void updateQnABoardAnswer(QnABoardDto qnABoardDto) {
-        qnABoardRepository.updateAnswer(qnABoardDto.getId(), qnABoardDto.getAnswer());
+        qnABoardRepository.updateAnswerAndState(qnABoardDto.getId(), qnABoardDto.getAnswer(), QnABoardState.ANSWERED);
     }
 
     public void deleteQnABoardsByIds(QnABoardDto qnABoardDto, HttpSession httpSession) {

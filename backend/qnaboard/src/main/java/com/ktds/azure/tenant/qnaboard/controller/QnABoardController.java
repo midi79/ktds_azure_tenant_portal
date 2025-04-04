@@ -40,12 +40,6 @@ public class QnABoardController {
         return ResponseEntity.ok(qnABoardService.updateQnABoard(qnABoardDto, httpSession));
     }
 
-    @PatchMapping("/update/state")
-    public ResponseEntity<String> updateQnABoardState(@RequestBody QnABoardDto qnABoardDto) {
-        qnABoardService.updateQnABoardState(qnABoardDto);
-        return ResponseEntity.accepted().body("Updated Success");
-    }
-
     @PatchMapping("/update/answer")
     public ResponseEntity<String> updateQnABoardAnswer(@RequestBody QnABoardDto qnABoardDto) {
         qnABoardService.updateQnABoardAnswer(qnABoardDto);

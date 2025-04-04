@@ -18,7 +18,6 @@ public class QnABoardDto {
     private String writer;
     private String projectCode;
     private String projectName;
-    private String purpose;
     private String content;
     private String answer;
     private QnABoardType type;
@@ -32,7 +31,6 @@ public class QnABoardDto {
                 ", writer='" + writer + '\'' +
                 ", projectCode='" + projectCode + '\'' +
                 ", projectName='" + projectName + '\'' +
-                ", purpose='" + purpose + '\'' +
                 ", type=" + type +
                 ", content='" + content + '\'' +
                 ", answer=" + answer +

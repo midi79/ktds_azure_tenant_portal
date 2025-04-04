@@ -38,9 +38,6 @@ public class QnABoard extends BaseTimeEntity implements Serializable {
     private String projectName;
 
     @Column
-    private String purpose;
-
-    @Column
     private String content;
 
     @Column
