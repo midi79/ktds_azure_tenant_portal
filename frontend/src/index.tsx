@@ -7,45 +7,61 @@ import MainPage from "./components/pages/main/MainPage.tsx";
 import RequestBoardListPage from "./components/pages/requestboard/RequestBoardListPage.tsx";
 import RequestBoardEditPage from "./components/pages/requestboard/RequestBoardEditPage.tsx";
 import RequestBoardViewPage from "./components/pages/requestboard/RequestBoardViewPage.tsx";
+
 import QnABoardListPage from "./components/pages/qnaboard/QnABoardListPage.tsx";
+import QnAFormPage from "./components/pages/qnaboard/QnAFormPage.tsx";
+import QnABoardViewPage from "./components/pages/qnaboard/QnABoardViewPage.tsx";
+
 import ErrorPage from "./components/pages/error/ErrorPage.tsx";
 
 const router = createBrowserRouter([
-    {
-        path: "",
-        element: <MainPage />,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                path: "/",
-                element: <RequestBoardListPage />,
-            },
-            {
-                path: "pages/request",
-                element: <RequestBoardListPage />,
-            },
-            {
-                path: "pages/request/edit",
-                element: <RequestBoardEditPage />,
-            },
-            {
-                path: "pages/request/view/:id",
-                element: <RequestBoardViewPage />,
-            },
-            {
-                path: "pages/request/edit/:id",
-                element: <RequestBoardEditPage />,
-            },  
-            {
-                path: "pages/qna",
-                element: <QnABoardListPage />,
-            },        
-        ],
-    },
+  {
+    path: "",
+    element: <MainPage />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/",
+        element: <RequestBoardListPage />,
+      },
+      {
+        path: "pages/request",
+        element: <RequestBoardListPage />,
+      },
+      {
+        path: "pages/request/edit",
+        element: <RequestBoardEditPage />,
+      },
+      {
+        path: "pages/request/view/:id",
+        element: <RequestBoardViewPage />,
+      },
+      {
+        path: "pages/request/edit/:id",
+        element: <RequestBoardEditPage />,
+      },
+      {
+        path: "pages/qna",
+        element: <QnABoardListPage />,
+      },
+      {
+        path: "pages/qna/edit",
+        element: <QnAFormPage />,
+      },
+      {
+        path: "pages/qna/view/:id",
+        element: <QnABoardViewPage />,
+      },
+      {
+        path: "pages/qna/edit/:id",
+        element: <QnAFormPage />,
+      },
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-    </QueryClientProvider>
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>
 );
