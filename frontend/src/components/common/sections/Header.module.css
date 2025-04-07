@@ -1,53 +1,71 @@
 .header__wrapper {
-    display: flex;
-    width: 100vw;
-    height: 70px;
-    justify-content: flex-start;
-    background-color: white;
-    margin: 0px 0px;
-    border-bottom: 1px solid rgb(160, 160, 160);
+  display: flex;
+  width: 100vw;
+  height: 70px;
+  justify-content: flex-start;
+  background-color: white;
+  margin: 0px 0px;
+  border-bottom: 1px solid rgb(160, 160, 160);
 }
 
 .header__title {
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-    gap: 20px;
-    font-size: 17px;
-    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif;
-    font-weight: 800;
-    color: rgb(18, 76, 163);    
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  gap: 20px;
+  font-size: 17px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Verdana, sans-serif;
+  font-weight: 800;
+  color: rgb(18, 76, 163);
+  cursor: pointer;
 }
 
-.header__title img {    
-    object-fit: cover;
+.header__title img {
+  object-fit: cover;
 }
 
 .nav__wrapper {
-    display: flex;
-    justify-content: flex-start;
-    gap: 30px;
-    padding: 25px 10px 5px 80px;
-    background-color: white;
-}
-
-.nav__menu {
-    font-size: 20px;
-    font-weight: 630;
-    padding-left: 10px;    
-    padding-top: 5px;
-    color: black;
-    cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+  padding: 25px 10px 5px 80px;
+  background-color: white;
 }
 
 .header__user {
-    display: flex;
-    flex-grow: 1;
-    justify-content: flex-end;     
-    padding: 30px 30px 0px 0px;
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  padding: 30px 30px 0px 0px;
 }
 
 .header__user span {
-    font-weight: 600;
+  font-weight: 600;
+}
+
+.nav__menu {
+  font-size: 20px;
+  font-weight: 500; /* 기본은 덜 굵게 */
+  padding-left: 10px;
+  padding-top: 5px;
+  color: #888888; /* 회색 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+
+.nav__menu:hover {
+  text-decoration: underline;
+}
+
+/* focus 또는 active 상태일 때 (선택된 메뉴처럼 보이게 하고 싶다면 JS 처리 필요) */
+.nav__menu:focus,
+.nav__menu:active {
+  font-weight: bold;
+  outline: none;
+}
+
+.active {
+  color: black;
 }
