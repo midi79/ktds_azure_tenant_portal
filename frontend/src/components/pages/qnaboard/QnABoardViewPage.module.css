@@ -1,7 +1,6 @@
 .board__view__wrapper {
   width: 100vw;
-  height: 85vh;
-
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -9,6 +8,7 @@
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   background-color: white;
+  padding-bottom: 20px;
 }
 
 .board__view__header {
@@ -48,6 +48,23 @@
 .board__view__table td {
   padding: 10px 11px; /* 셀 안쪽 여백 */
   border: 1px solid #b4b4b4; /* 행 아래 테두리 */
+}
+
+.board__view__table td p {
+  margin: 0px;
+  white-space: pre-wrap;
+}
+
+.board__view__table td h1,
+.board__view__table td h2,
+.board__view__table td h3 {
+  margin: 0px;
+  padding: 0px;
+}
+
+.board__view__table td ul,
+.board__view__table td ol {
+  margin: 0px;
 }
 
 .board__view__table td:first-child {

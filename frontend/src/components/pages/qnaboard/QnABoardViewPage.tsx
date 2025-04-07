@@ -13,7 +13,7 @@ const QnABoardViewPage = () => {
   const { id } = useParams();
 
   const { data, isError, error } = useQuery({
-    queryKey: ["request", id],
+    queryKey: ["qnaboard", id],
     queryFn: () => getQnABoard(id),
   });
 
@@ -63,15 +63,6 @@ const QnABoardViewPage = () => {
           </div>
         </div>
         <div className={styles.board__view__button}>
-          {data && data.state === "REQUEST" && (
-            <>
-              <Button
-                title="수정하기"
-                type="button"
-                onClickHandler={onAnswerUpdateHandler}
-              />
-            </>
-          )}
           <Button
             title="뒤로가기"
             onClickHandler={onBackClickHandler}
@@ -170,7 +161,7 @@ const QnABoardViewPage = () => {
                     <Textarea
                       name="content"
                       placeholder="답변을 입력해주세요"
-                      width={500}
+                      width={600}
                       defaultValue=""
                       onChange={(e) => setAnswerData(e.target.value)}
                     />
