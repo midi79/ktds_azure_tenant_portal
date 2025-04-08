@@ -79,8 +79,6 @@ export async function updateQnABoardAnswer(data: any) {
 
     return response.data;
   } catch (error: any) {
-    console.error("🔥 실제 에러 로그:", error); // 요거 추가
-
     throw new Error(
       axios.isAxiosError(error) && error.response
         ? error.response.data
@@ -97,21 +95,6 @@ export async function getQnABoards({
   fromDate,
   toDate,
 }: IPageProp) {
-  // console.log(
-  //     "size:",
-  //     size,
-  //     "page:",
-  //     page,
-  //     "searchOption",
-  //     searchOption,
-  //     "searchTerm",
-  //     searchTerm,
-  //     "fromDate",
-  //     fromDate,
-  //     "toDate",
-  //     toDate
-  // );
-
   let URL = `${BASE_URL}/dash/api/v1/qna-board/all?size=${size}&page=${page}`;
 
   if (
@@ -133,7 +116,6 @@ export async function getQnABoards({
     }
   }
 
-  //console.log("URL : ", URL);
   try {
     const response = await axios.get(URL, { withCredentials: true });
 

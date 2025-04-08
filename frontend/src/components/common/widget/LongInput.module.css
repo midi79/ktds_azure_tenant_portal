@@ -1,24 +1,28 @@
 .long__input__wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 300px;
-    padding: 8px;    
-    outline: 1px solid #acacac;
-    transition: outline-color 0.1s ease;
-    background-color: white;    
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  padding: 8px;
+  outline: 1px solid #acacac;
+  transition: outline-color 0.1s ease;
+  background-color: white;
 }
 
 .long__input__content {
-    outline: none;
-    border: none;
-    width: 100%;
-    font-size: 15px;
-    font-weight: 500;    
-    background-color: #ffffff;
-    color: #000000;
+  outline: none;
+  border: none;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 500;
+  background-color: #ffffff;
+  color: #000000;
 }
 
-.long__input__wrapper:focus-within {    
-    outline: 1.5px solid #241e5a;
+.long__input__wrapper:focus-within {
+  outline: 1.5px solid #241e5a;
+}
+
+textarea {
+  all: unset;
 }

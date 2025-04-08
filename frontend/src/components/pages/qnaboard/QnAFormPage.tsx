@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Button from "../../common/widget/Button";
 import LongInput from "../../common/widget/LongInput";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   saveQnABoard,
   getQnABoard,
@@ -20,15 +20,6 @@ const QnAFormPage = () => {
   const [id, setId] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState("sandbox");
   const { user } = useUserInfo();
-  const [formData, setFormData] = useState({
-    title: "",
-    projectName: "",
-    projectCode: "",
-    type: "",
-    content: "",
-    answer: "",
-  });
-
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
 
@@ -41,6 +32,17 @@ const QnAFormPage = () => {
     queryFn: () => getQnABoard(id),
     enabled: id ? true : false,
   });
+
+  const [formData, setFormData] = useState({
+    title: "",
+    projectName: "",
+    projectCode: "",
+    type: "",
+    content: "",
+    answer: "",
+  });
+
+  const [content, setContent] = useState(data?.content || "");
 
   const {
     mutate: saveMutate,
@@ -89,11 +91,11 @@ const QnAFormPage = () => {
       setShowValidation(true);
       return false;
     }
-    // if (!formData.content) {
-    //   setValidationMessage("질문 내용을 입력해주세요.");
-    //   setShowValidation(true);
-    //   return false;
-    // }
+    if (!formData.content) {
+      setValidationMessage("질문 내용을 입력해주세요.");
+      setShowValidation(true);
+      return false;
+    }
     return true;
   };
 
@@ -115,6 +117,7 @@ const QnAFormPage = () => {
       writer: "테스트유저",
       state: "SAVE",
       id: id ? id : null,
+      content: content,
     };
 
     if (id) {
@@ -130,6 +133,7 @@ const QnAFormPage = () => {
     setValidationMessage("");
 
     if (!validateForm(formData)) {
+      console.log("onSubmitHandler 실행");
       return;
     }
 
@@ -137,9 +141,10 @@ const QnAFormPage = () => {
       ...formData,
       type: selectedType.toUpperCase(),
       //writer: user?.name,
-      writer: "테스트",
+      writer: "테스트유저",
       state: "REQUEST",
       id: id ? id : null,
+      content: content,
     };
 
     if (id) {
@@ -185,7 +190,7 @@ const QnAFormPage = () => {
         content: data.content || "",
         answer: data.answer || "",
       });
-
+      setContent(data.content);
       setId(data.id || null);
     }
   }, [data]);
@@ -294,7 +299,7 @@ const QnAFormPage = () => {
             <tr>
               <td>질문 내용</td>
               <td>
-                <Tiptap />
+                <Tiptap content={content} setContent={setContent} />
               </td>
             </tr>
           </tbody>

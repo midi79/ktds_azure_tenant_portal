@@ -52,7 +52,7 @@ const QnABoardListPage = () => {
     error: listError,
     refetch: listRefetch,
   } = useQuery({
-    queryKey: ["qna", page, size],
+    queryKey: ["qnaboard", page, size],
     queryFn: () =>
       getQnABoards({
         size,
