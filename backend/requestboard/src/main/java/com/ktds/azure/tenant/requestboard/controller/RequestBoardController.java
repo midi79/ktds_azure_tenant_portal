@@ -10,8 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/dash/api/v1/request-board")
@@ -56,5 +59,17 @@ public class RequestBoardController {
     public ResponseEntity<Void> deleteBoards(@RequestBody RequestBoardDto requestBoardDto, HttpSession httpSession) {
         requestBoardService.deleteReqeuestBoardsByIds(requestBoardDto, httpSession);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<RequestBoardListDto>> searchRequestBoards(
+            @RequestParam(name="writer", required = false) String writer,
+            @RequestParam(name="title", required = false) String title,
+            @RequestParam(name="fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(name="toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+            @RequestParam(name="state", required = false) String state,
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<RequestBoardListDto> results = requestBoardService.searchBoards(writer, title, fromDate, toDate, state, pageable);
+        return ResponseEntity.ok(results);
     }
 }

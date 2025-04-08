@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,6 +21,7 @@ public class RequestBoardDto {
     private String projectCode;
     private String projectName;
     private String purpose;
+    private Boolean requiredDev;
     private LocalDate startDate;
     private LocalDate endDate;
     private String budgetManager;
@@ -45,6 +47,7 @@ public class RequestBoardDto {
                 ", projectCode='" + projectCode + '\'' +
                 ", projectName='" + projectName + '\'' +
                 ", purpose='" + purpose + '\'' +
+                ", requiredDev='" + requiredDev + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", budgetManager='" + budgetManager + '\'' +

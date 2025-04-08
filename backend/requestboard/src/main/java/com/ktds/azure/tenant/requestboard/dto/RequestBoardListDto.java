@@ -20,5 +20,8 @@ public class RequestBoardListDto {
     private String writer;
     private LocalDateTime createDate;
     private RequestBoardState state;
-
+    private LocalDateTime requestDate;
+    private LocalDateTime denyDate;
+    private LocalDateTime approvedDate;
+    private LocalDateTime completeDate;
 }

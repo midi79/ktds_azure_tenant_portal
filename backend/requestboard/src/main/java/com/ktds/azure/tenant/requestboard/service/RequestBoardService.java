@@ -4,9 +4,11 @@ package com.ktds.azure.tenant.requestboard.service;
 import com.ktds.azure.tenant.requestboard.dto.RequestBoardDto;
 import com.ktds.azure.tenant.requestboard.dto.RequestBoardListDto;
 import com.ktds.azure.tenant.requestboard.model.RequestBoard;
+import com.ktds.azure.tenant.requestboard.model.RequestBoardState;
 import com.ktds.azure.tenant.requestboard.model.UserInfo;
 import com.ktds.azure.tenant.requestboard.repository.RequestBoardRepository;
 import com.ktds.azure.tenant.requestboard.util.RequestBoardMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,7 +16,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -35,7 +41,7 @@ public class RequestBoardService {
 
     public RequestBoardDto saveRequestBoard(RequestBoardDto requestBoardDto, HttpSession httpSession) {
         // 일단 저장할때는 권한 체크 빼고 Front에서 writer 정보 셋팅 후에 처리
-        RequestBoard board = RequestBoardMapper.toEntity(requestBoardDto);
+        RequestBoard board = RequestBoardMapper.toEntity(requestBoardDto, new RequestBoard());
         requestBoardRepository.save(board);
         return requestBoardDto;
 
@@ -63,14 +69,24 @@ public class RequestBoardService {
         UserInfo userInfo = getUserInfo(httpSession);
         RequestBoard requestBoard = requestBoardRepository.findById(requestBoardDto.getId()).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
         if(userInfo.getName().equals(requestBoard.getWriter())) {
-            return RequestBoardMapper.toDto(requestBoardRepository.save(RequestBoardMapper.toEntity(requestBoardDto)));
+            if(RequestBoardState.REQUEST.equals(requestBoardDto.getState())) {
+                requestBoard.setRequestDate(LocalDateTime.now());
+            }
+            return RequestBoardMapper.toDto(requestBoardRepository.save(RequestBoardMapper.toEntity(requestBoardDto, requestBoard)));
         } else {
-            throw new RuntimeException("읽기 권한이 없습니다.");
+            throw new RuntimeException("업데이트 권한이 없습니다.");
         }
     }
 
     public void updateRequestBoardState(RequestBoardDto requestBoardDto) {
-        requestBoardRepository.updateState(requestBoardDto.getId(), requestBoardDto.getState());
+        RequestBoard board = requestBoardRepository.findById(requestBoardDto.getId()).orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
+        board.setState(requestBoardDto.getState());
+        switch (requestBoardDto.getState()) {
+            case RequestBoardState.DENY -> board.setDenyDate(LocalDateTime.now());
+            case RequestBoardState.APPROVED -> board.setApprovedDate(LocalDateTime.now());
+            case RequestBoardState.COMPLETE -> board.setCompleteDate(LocalDateTime.now());
+        }
+        requestBoardRepository.save(board);
     }
 
     public void deleteReqeuestBoardsByIds(RequestBoardDto requestBoardDto, HttpSession httpSession) {
@@ -86,4 +102,18 @@ public class RequestBoardService {
     public UserInfo getUserInfo(HttpSession httpSession) {
         return (UserInfo) httpSession.getAttribute("userInfo");
     }
+
+
+    /**
+     * Search ReqeustBoards by search condition
+     * @return RequestBoardDto List
+     */
+    public Page<RequestBoardListDto> searchBoards(String writer, String title, LocalDate fromDate, LocalDate toDate, String state, Pageable pageable) {
+        LocalDateTime localDateTimeFromDate = fromDate != null ? fromDate.atStartOfDay() : null;
+        LocalDateTime localDateTimeToDate = toDate != null ? toDate.plusDays(1).atStartOfDay() : null;
+        Page<RequestBoard> boardPage = requestBoardRepository.search(writer, title, localDateTimeFromDate, localDateTimeToDate, state, pageable);
+        List<RequestBoardListDto> listDtos = boardPage.getContent().stream().map(RequestBoardMapper::toBoardListDto).collect(Collectors.toList());
+        return new PageImpl<>(listDtos, pageable, boardPage.getTotalElements());
+    }
+
 }
