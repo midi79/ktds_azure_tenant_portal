@@ -161,9 +161,10 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                     <form className={styles.board__search__form} onSubmit={searchSubmitHandler}>
                         <div className={styles.board__search__group}>
                             <select id="searchOption" value={searchOption} onChange={optionChangeHandler}>
-                                <option value="title">Title</option>
-                                <option value="writer">Writer</option>                                
-                                <option value="date">Date</option>                                
+                                <option value="title">제목</option>
+                                <option value="writer">작성자</option>
+                                <option value="state">상태</option>
+                                <option value="date">작성일</option>
                             </select>
                         </div>
                         <div className={styles.board__search__group}>

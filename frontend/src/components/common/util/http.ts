@@ -83,7 +83,7 @@ export async function updateRequestBoardState(data: any) {
             withCredentials: true
         });
 
-        if (response.status !== 200) {
+        if (response.status !== 200 && response.status !== 202) {
             throw new Error(`Unexpected status: ${response.status}`);
         }
     } catch (error: any) {
@@ -96,20 +96,20 @@ export async function updateRequestBoardState(data: any) {
 }
 
 export async function getRequestBoards({ size, page, searchOption, searchTerm, fromDate, toDate }: IPageProp) {
-    // console.log(
-    //     "size:",
-    //     size,
-    //     "page:",
-    //     page,
-    //     "searchOption",
-    //     searchOption,
-    //     "searchTerm",
-    //     searchTerm,
-    //     "fromDate",
-    //     fromDate,
-    //     "toDate",
-    //     toDate
-    // );
+    console.log(
+        "size:",
+        size,
+        "page:",
+        page,
+        "searchOption:",
+        searchOption,
+        "searchTerm:",
+        searchTerm,
+        "fromDate:",
+        fromDate,
+        "toDate:",
+        toDate
+    );
 
     let URL = `${BASE_URL}/dash/api/v1/request-board/all?size=${size}&page=${page}`;
 
@@ -189,9 +189,6 @@ export async function getRequestBoard(id: string | null | undefined, type?: stri
     }
 }
 
-function checkNotNull(data: any) {
-    if (data || data === null || data == undefined || data === "") {
-        return false;
-    }
-    return true;
+function checkNotNull(data: any): boolean {
+    return data !== null && data !== undefined && data !== "";
 }
