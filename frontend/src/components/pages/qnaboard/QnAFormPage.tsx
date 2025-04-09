@@ -104,22 +104,20 @@ const QnAFormPage = () => {
     setShowValidation(false);
     setValidationMessage("");
 
-    if (!formData.projectName) {
-      setValidationMessage("프로젝트명은 필수 입력 항목입니다.");
-      setShowValidation(true);
-      return false;
-    }
-
     const data = {
       ...formData,
       type: selectedType.toUpperCase(),
-      // writer: user?.name,
-      writer: "테스트유저",
+      writer: user?.name,
       state: "SAVE",
       id: id ? id : null,
       content: content,
     };
 
+    if (!formData.projectName) {
+      setValidationMessage("프로젝트명은 필수 입력 항목입니다.");
+      setShowValidation(true);
+      return false;
+    }
     if (id) {
       updateMutate({ board: data });
     } else {
@@ -132,20 +130,19 @@ const QnAFormPage = () => {
     setShowValidation(false);
     setValidationMessage("");
 
-    if (!validateForm(formData)) {
-      console.log("onSubmitHandler 실행");
-      return;
-    }
-
     const data = {
       ...formData,
       type: selectedType.toUpperCase(),
-      //writer: user?.name,
-      writer: "테스트유저",
+      writer: user?.name,
       state: "REQUEST",
       id: id ? id : null,
       content: content,
     };
+
+    formData.content = content;
+    if (!validateForm(formData)) {
+      return;
+    }
 
     if (id) {
       updateMutate({ board: data });
@@ -231,13 +228,13 @@ const QnAFormPage = () => {
           </colgroup>
           <tbody>
             <tr>
-              <td>질문 내용</td>
+              <td>질문 제목</td>
               <td>
                 <LongInput
                   type="text"
                   name="title"
-                  placeholder="프로젝트명"
-                  width={500}
+                  placeholder="질문 제목을 입력해주세요"
+                  width={700}
                   defaultValue={data ? data.title : null}
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
@@ -270,8 +267,8 @@ const QnAFormPage = () => {
                 <LongInput
                   type="text"
                   name="projectName"
-                  placeholder="프로젝트명"
-                  width={500}
+                  placeholder="프로젝트 명을 입력해주세요"
+                  width={700}
                   defaultValue={data ? data.projectName : null}
                   onChange={(e) =>
                     setFormData({ ...formData, projectName: e.target.value })
@@ -286,7 +283,7 @@ const QnAFormPage = () => {
                   <LongInput
                     type="text"
                     name="projectCode"
-                    placeholder="프로젝트 코드"
+                    placeholder="프로젝트 코드를 입력해주세요"
                     width={300}
                     defaultValue={data ? data.projectCode : null}
                     onChange={(e) =>
