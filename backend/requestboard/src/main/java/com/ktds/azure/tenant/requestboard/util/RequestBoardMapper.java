@@ -13,31 +13,25 @@ public class RequestBoardMapper {
             return null;
         }
 
-        LocalDateTime editDate = null;
-
-        if (requestBoard.getCreateDate() != null) {
-            editDate = requestBoard.getModifyDate().isAfter(requestBoard.getCreateDate())  ? requestBoard.getModifyDate() : requestBoard.getCreateDate();
-        } else {
-            editDate = requestBoard.getModifyDate();
-        }
-
-
         return new RequestBoardListDto(requestBoard.getId(),
-                requestBoard.getTitle(),
-                requestBoard.getWriter(),
-                editDate,
-                requestBoard.getState());
+            requestBoard.getTitle(),
+            requestBoard.getWriter(),
+            requestBoard.getCreateDate(),
+            requestBoard.getState(),
+            requestBoard.getRequestDate(),
+            requestBoard.getDenyDate(),
+            requestBoard.getApprovedDate(),
+            requestBoard.getCompleteDate()
+        );
     }
 
 
-    public static RequestBoard toEntity(RequestBoardDto requestBoardDto) {
+    public static RequestBoard toEntity(RequestBoardDto requestBoardDto, RequestBoard board) {
 
         if (requestBoardDto == null) {
             return null;
         }
 
-        RequestBoard board = new RequestBoard();
-        board.setId(requestBoardDto.getId());
         // 최초 등록시 제목은 생성해줌
         if (requestBoardDto.getTitle() == null || requestBoardDto.getTitle().trim().isEmpty()) {
             board.setTitle("["+ requestBoardDto.getType() + "] " + requestBoardDto.getProjectName());
@@ -48,6 +42,7 @@ public class RequestBoardMapper {
         board.setProjectCode(requestBoardDto.getProjectCode());
         board.setProjectName(requestBoardDto.getProjectName());
         board.setPurpose(requestBoardDto.getPurpose());
+        board.setRequiredDev(requestBoardDto.getRequiredDev());
         board.setStartDate(requestBoardDto.getStartDate());
         board.setEndDate(requestBoardDto.getEndDate());
         board.setBudgetManager(requestBoardDto.getBudgetManager());
@@ -78,6 +73,7 @@ public class RequestBoardMapper {
                 board.getProjectCode(),
                 board.getProjectName(),
                 board.getPurpose(),
+                board.getRequiredDev(),
                 board.getStartDate(),
                 board.getEndDate(),
                 board.getBudgetManager(),

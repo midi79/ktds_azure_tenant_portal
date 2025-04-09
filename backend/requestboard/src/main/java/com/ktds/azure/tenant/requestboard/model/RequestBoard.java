@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -39,6 +40,9 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
 
     @Column(length = 1000)
     private String purpose;
+
+    @Column
+    private Boolean requiredDev;
 
     @Column
     private LocalDate startDate;
@@ -86,4 +90,48 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
 
     @Column(length = 4000)
     private String request;
+
+    @Column
+    private LocalDateTime requestDate;
+
+    @Column
+    private LocalDateTime denyDate;
+
+    @Column
+    private LocalDateTime approvedDate;
+
+    @Column
+    private LocalDateTime completeDate;
+
+    @Override
+    public String toString() {
+        return "RequestBoard{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", writer='" + writer + '\'' +
+                ", projectCode='" + projectCode + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", purpose='" + purpose + '\'' +
+                ", requiredDev=" + requiredDev +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", budgetManager='" + budgetManager + '\'' +
+                ", budgetManagerEmail='" + budgetManagerEmail + '\'' +
+                ", operationManager='" + operationManager + '\'' +
+                ", operationManagerEmail='" + operationManagerEmail + '\'' +
+                ", budget=" + budget +
+                ", alert=" + alert +
+                ", alertBudget=" + alertBudget +
+                ", managementGroup='" + managementGroup + '\'' +
+                ", ipCount=" + ipCount +
+                ", type=" + type +
+                ", state=" + state +
+                ", budgetLink='" + budgetLink + '\'' +
+                ", request='" + request + '\'' +
+                ", requestDate=" + requestDate +
+                ", denyDate=" + denyDate +
+                ", approvedDate=" + approvedDate +
+                ", completeDate=" + completeDate +
+                '}';
+    }
 }

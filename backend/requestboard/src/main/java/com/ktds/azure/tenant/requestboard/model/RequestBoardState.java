@@ -4,5 +4,6 @@ public enum RequestBoardState {
     SAVE,
     REQUEST,
     DENY,
-    APPROVED
+    APPROVED,
+    COMPLETE,
 }
