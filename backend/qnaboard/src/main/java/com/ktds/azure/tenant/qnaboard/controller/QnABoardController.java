@@ -2,6 +2,7 @@ package com.ktds.azure.tenant.qnaboard.controller;
 
 import com.ktds.azure.tenant.qnaboard.dto.QnABoardDto;
 import com.ktds.azure.tenant.qnaboard.dto.QnABoardListDto;
+import com.ktds.azure.tenant.qnaboard.model.UserInfo;
 import com.ktds.azure.tenant.qnaboard.service.QnABoardService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,11 @@ public class QnABoardController {
 
     @Autowired
     QnABoardService qnABoardService;
+
+    @GetMapping("/user")
+    public ResponseEntity<UserInfo> getUserInfo(HttpSession httpSession){
+        return ResponseEntity.ok(qnABoardService.getUserInfo(httpSession));
+    }
 
     @GetMapping("/all")
     public ResponseEntity<Page<QnABoardListDto>> getAllQnABoards(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {

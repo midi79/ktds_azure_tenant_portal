@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import InputTitle from "../../common/widget/InputTitle";
 import useUserInfo from "../../common/store/user";
+import Textarea from "../../common/widget/Textarea";
 
 const RequestBoardEditPage = () => {
     const [showValidation, setShowValidation] = useState<boolean>(false);
@@ -21,11 +22,12 @@ const RequestBoardEditPage = () => {
     const [selectedType, setSelectedType] = useState("sandbox");
     const [selectedMngGroup, setSelectedMngGroup] = useState<string>("");
     const [isChecked, setIsChecked] = useState(false);    
+    const [requiredDev, setRequiredDev] = useState(false);
     const {user} = useUserInfo();
     const [formData, setFormData] = useState({
         projectName: "",
         projectCode: "",
-        purpose: "",
+        purpose: "",        
         budgetManager: "",
         budgetManagerEmail: "",
         operationManager: "",
@@ -169,10 +171,12 @@ const RequestBoardEditPage = () => {
             ...formData, 
             type : selectedType.toUpperCase(), 
             alert : isChecked,
+            requiredDev : requiredDev,
             startDate,
             endDate,
             managementGroup : selectedMngGroup,       
             writer : user?.name,
+            writerEmail : user?.email,
             state : "SAVE",
             id: id ? id : null,
         };
@@ -188,8 +192,12 @@ const RequestBoardEditPage = () => {
         event.preventDefault();
         setShowValidation(false);
         setValidationMessage("");
-
+        
         if(!validateForm(formData)) {
+            return;
+        }
+
+        if(!confirm("신청 후에는 수정할 수 없습니다. 진행하시겠습니까?")){
             return;
         }
  
@@ -197,10 +205,12 @@ const RequestBoardEditPage = () => {
             ...formData,
             type : selectedType.toUpperCase(), 
             alert : isChecked,
+            requiredDev : requiredDev,
             startDate,
             endDate,
             managementGroup : selectedMngGroup,       
             writer : user?.name,
+            writerEmail : user?.email,
             state : "REQUEST",
             id: id ? id : null,
         };  
@@ -219,11 +229,9 @@ const RequestBoardEditPage = () => {
         setValidationMessage("");
 
         if(confirm("삭제 하시겠습니까?")) {
-
             const data = {
                 id : id,                
             }
-
             deleteMutate({ board: data });
         }
 
@@ -239,6 +247,10 @@ const RequestBoardEditPage = () => {
         setIsChecked(!isChecked);
     }
 
+    const onRequiredDevCheckboxHandler = () => {
+        setRequiredDev(!requiredDev);
+    }
+
     useEffect(() => {
         if (params && params.id) {
             setId(params.id);
@@ -250,7 +262,7 @@ const RequestBoardEditPage = () => {
             setFormData({                
                 projectName: data.projectName || "",
                 projectCode: data.projectCode || "",
-                purpose: data.purpose || "",
+                purpose: data.purpose || "",                
                 budgetManager: data.budgetManager || "",
                 budgetManagerEmail: data.budgetManagerEmail || "",
                 operationManager: data.operationManager || "",
@@ -266,6 +278,7 @@ const RequestBoardEditPage = () => {
             setSelectedType(data.type?.toLowerCase() || "sandbox");
             setSelectedMngGroup(data.managementGroup || "");
             setIsChecked(data.alert || false);
+            setRequiredDev(data.requiredDev || false);
             setStartDate(data.startDate ? new Date(data.startDate) : null);
             setEndDate(data.endDate ? new Date(data.endDate) : null);
         }
@@ -278,6 +291,7 @@ const RequestBoardEditPage = () => {
         projectCode : "경영성과팀에서 비용심의 후 발행해준 코드를 입력해주세요",
         budgetManager: "프로젝트 대표 빌링 담당자이며, <br> 프로젝트 예산에 맞게 Azure 사용료 관리",
         operationManager: "프로젝트 대표 운영 담당자이며, <br> 프로젝트 멤버 권한 관리와 Azure 시스템 구축/운영 수행",
+        requiredDev : "운영 환경과 별개로 개발 환경 필요 여부",
         alertCheck : "월별 경보 수신을 희망할 경우만 선택 <br> (월별 균등하지 못한 금액의 경우는 월경보 발생 불가)", 
         alertBudget : "월 경보 한도 금액을 설정하여 임계치 도달 시 <br> 운영 담당자에게 메일을 발송",
         mng_group : "Private Spoke#1 : KT DS 내부망을 사용하는 서비스를 구성하고 운영 <br>" + 
@@ -350,7 +364,7 @@ const RequestBoardEditPage = () => {
                         }
                         {selectedType === "workload" &&
                         <tr>
-                            <td><InputTitle title="프로젝트 기간" infoMessage="" /></td>
+                            <td><InputTitle title="프로젝트 기간" /></td>
                             <td>
                                 <div className={styles.board__date}>
                                     <DatePicker
@@ -370,9 +384,21 @@ const RequestBoardEditPage = () => {
                             </td>
                         </tr>
                         }
+                        {selectedType === "workload" &&
+                            <tr>
+                                <td><InputTitle title="개발 환경 필요 여부" infoMessage={titleDesc.requiredDev}  required={false}/></td>
+                                <td>
+                                    <Checkbox                                    
+                                        checkHandler={onRequiredDevCheckboxHandler}                                    
+                                        type="check"                                    
+                                        isChecked={requiredDev}
+                                    />
+                                </td>
+                            </tr>
+                        }
                         {selectedType === "sandbox" &&
                             <tr>
-                                <td><InputTitle title="사용 목적" infoMessage="" /></td>
+                                <td><InputTitle title="사용 목적" /></td>
                                 <td>
                                     <LongInput
                                         type="text"
@@ -432,7 +458,7 @@ const RequestBoardEditPage = () => {
                             </td>
                         </tr>
                         <tr>
-                            <td><InputTitle title="총 예산(원)" infoMessage="" /></td>
+                            <td><InputTitle title="총 예산(원)" /></td>
                             <td>
                                 <LongInput
                                     type="text"
@@ -508,11 +534,10 @@ const RequestBoardEditPage = () => {
                         <tr>
                             <td>요청사항</td>
                             <td>
-                                <textarea 
+                                <Textarea 
                                     name="request"
                                     defaultValue={data ? data.request : null}
-                                    rows={3}
-                                    cols={30}
+                                    width={640}                                    
                                     onChange={(e) => setFormData({...formData, request: e.target.value})}
                                 />
                             </td>

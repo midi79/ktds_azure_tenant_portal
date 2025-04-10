@@ -14,12 +14,32 @@ interface IPageProp {
 
 let BASE_URL = "http://localhost:8091";
 
-// const ENV = import.meta.env.VITE_ENV;
-// if (ENV === "dev" || ENV === "prd") {
-//     BASE_URL = import.meta.env.VITE_API_URL;
-// }
+const ENV = import.meta.env.VITE_ENV;
+if (ENV === "dev" || ENV === "prd") {
+  BASE_URL = import.meta.env.VITE_API_URL;
+}
 
 console.log("BASE_URL", BASE_URL);
+
+export async function getUserInfo() {
+  try {
+    const response = await axios.get(BASE_URL + "/dash/api/v1/qna-board/user", {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected status: ${response.status}`);
+    }
+  } catch (error: any) {
+    throw new Error(
+      axios.isAxiosError(error) && error.response
+        ? error.response.data
+        : "An error occurred while fetching user data"
+    );
+  }
+}
 
 export async function saveQnABoard(data: any) {
   try {
@@ -173,11 +193,16 @@ export async function getQnABoard(
       throw new Error(`Unexpected status: ${response.status}`);
     }
   } catch (error: any) {
-    throw new Error(
-      axios.isAxiosError(error) && error.response
-        ? error.response.data
-        : "An error occurred while fetching board data"
-    );
+    if (axios.isAxiosError(error) && error.response) {
+      const message = "권한이 없습니다.";
+      alert(message);
+      return;
+    }
+    // throw new Error(
+    //   axios.isAxiosError(error) && error.response
+    //     ? error.response.data
+    //     : "An error occurred while fetching board data"
+    // );
   }
 }
 

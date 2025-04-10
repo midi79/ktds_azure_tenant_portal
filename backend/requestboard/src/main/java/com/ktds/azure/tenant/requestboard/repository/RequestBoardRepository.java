@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 public interface RequestBoardRepository extends JpaRepository<RequestBoard, Long> {
 
     @Query("SELECT board FROM RequestBoard board WHERE " +
-            "(:writer IS NULL OR board.writer LIKE :writer) AND " +
-            "(:title IS NULL OR board.title LIKE :title) AND " +
+            "(:writer IS NULL OR board.writer LIKE CONCAT('%', CAST(:writer AS string), '%')) AND " +
+            "(:title IS NULL OR board.title LIKE CONCAT('%', CAST(:title AS string), '%')) AND " +
             "(cast(:fromDate as timestamp) IS NULL OR board.createDate >= :fromDate) AND " +
             "(cast(:toDate as timestamp) IS NULL OR board.createDate <= :toDate) AND " +
             "(:state IS NULL OR board.state = :state)")
@@ -28,7 +28,7 @@ public interface RequestBoardRepository extends JpaRepository<RequestBoard, Long
                               @Param("title") String title,
                               @Param("fromDate") LocalDateTime fromDate,
                               @Param("toDate") LocalDateTime toDate,
-                              @Param("state") String state,
+                              @Param("state") RequestBoardState state,
                               Pageable pageable);
 
 }

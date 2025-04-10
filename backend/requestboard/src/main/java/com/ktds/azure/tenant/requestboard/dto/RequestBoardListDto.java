@@ -18,6 +18,7 @@ public class RequestBoardListDto {
     private Long id;
     private String title;
     private String writer;
+    private String writerEmail;
     private LocalDateTime createDate;
     private RequestBoardState state;
     private LocalDateTime requestDate;

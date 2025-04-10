@@ -13,17 +13,19 @@ import QnAFormPage from "./components/pages/qnaboard/QnAFormPage.tsx";
 import QnABoardViewPage from "./components/pages/qnaboard/QnABoardViewPage.tsx";
 
 import ErrorPage from "./components/pages/error/ErrorPage.tsx";
+import WelcomePage from "./components/pages/welcome/WelcomePage.tsx";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <WelcomePage />, // No Header/Footer
+    errorElement: <ErrorPage />,
+  },
   {
     path: "",
     element: <MainPage />,
     errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "/",
-        element: <RequestBoardListPage />,
-      },
+    children: [      
       {
         path: "pages/request",
         element: <RequestBoardListPage />,

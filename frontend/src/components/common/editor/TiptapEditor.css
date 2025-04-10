@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 500px;
+  width: 700px;
   padding: 8px;
   outline: 1px solid #acacac;
   transition: outline-color 0.1s ease;
@@ -114,16 +114,16 @@
 }
 
 .bubble-menu {
-  background-color: white;
-  border: 1px solid #d1d5db;
-  border-radius: 0.7rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #f3f4f6; /* gray-100 */
+  border-radius: 0.5rem;
+  padding: 0.25rem;
   display: flex;
   gap: 0.5rem;
-  padding: 0.2rem;
+  margin: 0.25rem;
 }
 
 .bubble-menu button {
+  color: black;
   background: none;
   border: none;
   padding: 0.4rem 0.6rem;
@@ -131,11 +131,13 @@
 }
 
 .bubble-menu button:hover {
-  background-color: #e5e7eb;
+  background-color: white;
+  color: #7c3aed;
+  font-weight: bold;
 }
 
 .bubble-menu button.is-active {
-  background-color: #7c3aed; /* purple-600 */
+  background-color: #7c3aed;
   color: white;
 }
 
@@ -149,17 +151,19 @@
 }
 
 .floating-menu button {
+  color: black;
   background: none;
   border: none;
   padding: 0.4rem 0.6rem;
   border-radius: 0.4rem;
 }
 
-.floating-menu button:hover {
-  background-color: #e5e7eb;
+.floating-menu button.is-active {
+  background-color: #7c3aed;
+  color: white;
 }
 
-.floating-menu button.is-active {
+.floating-menu button:hover {
   background-color: white;
   color: #7c3aed;
   font-weight: bold;
