@@ -4,9 +4,11 @@ import styles from "./RequestBoardViewPage.module.css";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getRequestBoard, updateRequestBoardState } from "../../common/util/http";
 import Checkbox from "../../common/widget/Checkbox";
+import useUserInfo from "../../common/store/user";
 
 const RequestBoardViewPage = () => {
     const navigate = useNavigate();
+    const {user} = useUserInfo();
 
     const { id } = useParams();
 
@@ -39,21 +41,27 @@ const RequestBoardViewPage = () => {
             const data = {
                 id : id,
                 state : "APPROVED"
-            }
-    
+            }    
             updateMutate({ board: data });
         }
     }
 
     const onDenyHandler = () => {
-
         if(confirm("반려 하시겠습니까?")) {
-
             const data = {
                 id : id,
                 state : "DENY"
             }
+            updateMutate({ board: data });
+        }
+    }
 
+    const onCompleteHandler = () => {
+        if(confirm("완료 하시겠습니까?")) {
+            const data = {
+                id : id,
+                state : "COMPLETE"
+            }
             updateMutate({ board: data });
         }
     }
@@ -65,11 +73,18 @@ const RequestBoardViewPage = () => {
                     <div className={styles.board__view__header__title}>KD DS Azure Tenant 구독 신청</div>                    
                 </div>
                 <div className={styles.board__view__button}>
-                    { data && (data.state === "APPROVED" || data.state === "DENY") ||
-                        <>
+                    { (data && data.state === "REQUEST" && user?.role === "ROLE_ADMIN") && (
+                        <>                        
                             <Button title="승인" type="button" onClickHandler={onApproveHandler}/>
                             <Button title="반려" type="button" onClickHandler={onDenyHandler}/>
                         </>
+                        )
+                    }
+                    { (data && data.state === "APPROVED" && user?.role === "ROLE_ADMIN") && (
+                        <>                        
+                            <Button title="완료" type="button" onClickHandler={onCompleteHandler}/>                            
+                        </>
+                        )
                     }
                     <Button title="뒤로가기" onClickHandler={onBackClickHandler} type="button" />
                 </div>
@@ -117,6 +132,18 @@ const RequestBoardViewPage = () => {
                             </td>
                         </tr>
                         }
+                        {data && data.type === "WORKLOAD" &&
+                        <tr>
+                            <td>개발 환경 필요 여부</td>
+                            <td>
+                                <Checkbox                                                                        
+                                    type="check"                                    
+                                    isChecked={data ? data.requiredDev : false}
+                                    checkHandler={(e)=>console.log(e)}
+                                />
+                            </td>
+                        </tr>
+                        }
                         {data && data.type === "SANDBOX" &&
                             <tr>
                                 <td>사용 목적</td>
@@ -148,8 +175,8 @@ const RequestBoardViewPage = () => {
                             <td>
                                 <Checkbox                                                                        
                                     type="check"                                    
-                                    isChecked={data ? data.alert : false}
-                                    checkHandler={(e)=>console.log(e)}
+                                    isChecked={data ? data.alert : false}   
+                                    checkHandler={(e)=>console.log(e)}                                 
                                 />
                             </td>
                         </tr>

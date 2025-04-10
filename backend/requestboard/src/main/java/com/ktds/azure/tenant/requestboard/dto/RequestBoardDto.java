@@ -18,6 +18,7 @@ public class RequestBoardDto {
     private Long id;
     private String title;
     private String writer;
+    private String writerEmail;
     private String projectCode;
     private String projectName;
     private String purpose;
@@ -44,6 +45,7 @@ public class RequestBoardDto {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", writer='" + writer + '\'' +
+                ", writerEmail='" + writerEmail + '\'' +
                 ", projectCode='" + projectCode + '\'' +
                 ", projectName='" + projectName + '\'' +
                 ", purpose='" + purpose + '\'' +

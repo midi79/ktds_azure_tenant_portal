@@ -10,6 +10,7 @@ import newIcon from "../../../assets/icons/note_add.svg";
 import { getRequestBoards } from "../../common/util/http";
 import Button from "../../common/widget/Button";
 import { format } from "date-fns";
+import useUserInfo from "../../common/store/user";
 
 interface IBoardList {
     id: number;    
@@ -34,6 +35,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
     const [searchTerm, setSearchTerm] = useState<any>("");
     const [fromDate, setFromDate] = useState<any>(null);
     const [toDate, setToDate] = useState<any>(null);
+    const {user} = useUserInfo();
 
     const navigate = useNavigate();
 
@@ -41,6 +43,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
         {name: "REQUEST", value: "등록", color:"brown"},
         {name: "APPROVED", value: "승인", color:"blue"},
         {name: "DENY", value: "반려", color:"red"},
+        {name: "COMPLETE", value: "완료", color:"black"},
     ];
     
     const {
@@ -144,9 +147,14 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                 boardListData.map((item: any) => (
                                     <tr className={styles.board__list} key={item.id}>                                        
                                         <td className={styles.td__id}>{item.id}</td>
-                                        <td className={styles.td__title} onClick={() => onTitleClickHandler(item)}>
-                                            {item.title}
-                                        </td>
+                                        { item.writerEmail === user?.email || user?.role === "ROLE_ADMIN" ?
+                                            (<td className={styles.td__title} onClick={() => onTitleClickHandler(item)}>
+                                                {item.title}
+                                            </td>) : 
+                                            (<td> 
+                                                {item.title}
+                                            </td>)
+                                        }
                                         <td style={{textAlign:"center"}}>{item.writer}</td>
                                         <td style={{textAlign:"center"}}>
                                             <DateTimeConverter date={item.createDate} />

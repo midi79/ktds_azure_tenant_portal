@@ -2,6 +2,7 @@ package com.ktds.azure.tenant.requestboard.controller;
 
 import com.ktds.azure.tenant.requestboard.dto.RequestBoardDto;
 import com.ktds.azure.tenant.requestboard.dto.RequestBoardListDto;
+import com.ktds.azure.tenant.requestboard.model.RequestBoardState;
 import com.ktds.azure.tenant.requestboard.model.UserInfo;
 import com.ktds.azure.tenant.requestboard.service.RequestBoardService;
 import jakarta.servlet.http.HttpSession;
@@ -50,8 +51,8 @@ public class RequestBoardController {
     }
 
     @PatchMapping("/update/state")
-    public ResponseEntity<String> updateRequestBoardState(@RequestBody RequestBoardDto requestBoardDto) {
-        requestBoardService.updateRequestBoardState(requestBoardDto);
+    public ResponseEntity<String> updateRequestBoardState(@RequestBody RequestBoardDto requestBoardDto, HttpSession httpSession) {
+        requestBoardService.updateRequestBoardState(requestBoardDto, httpSession);
         return ResponseEntity.accepted().body("Update Success");
     }
 
@@ -67,7 +68,7 @@ public class RequestBoardController {
             @RequestParam(name="title", required = false) String title,
             @RequestParam(name="fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
             @RequestParam(name="toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
-            @RequestParam(name="state", required = false) String state,
+            @RequestParam(name="state", required = false) RequestBoardState state,
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<RequestBoardListDto> results = requestBoardService.searchBoards(writer, title, fromDate, toDate, state, pageable);
         return ResponseEntity.ok(results);

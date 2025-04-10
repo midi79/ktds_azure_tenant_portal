@@ -3,7 +3,7 @@ import styles from "./Checkbox.module.css";
 
 interface ICheckboxProp {
     label?: string;
-    checkHandler: (event: ChangeEvent<HTMLInputElement>) => void;
+    checkHandler?: (event: ChangeEvent<HTMLInputElement>) => void;
     isChecked?: boolean | undefined;
     index?: number;
     type: string;

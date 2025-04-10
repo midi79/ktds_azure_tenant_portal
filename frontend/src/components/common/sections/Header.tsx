@@ -9,7 +9,7 @@ import useUserInfo from "../store/user";
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  
   const menus = [
     { url: "request", title: "신청" },
     { url: "qna", title: "Q&A" },
@@ -27,7 +27,7 @@ const Header = () => {
   });
 
   const onTitleClickHandler = (): void => {
-    navigate("/");
+    navigate("/pages/request");
   };
 
   const onMenuClickHandler = (menu: string) => {
@@ -50,7 +50,7 @@ const Header = () => {
     <header className={styles.header__wrapper}>
       <div className={styles.header__title} onClick={onTitleClickHandler}>
         <img src={ktdsLogoImage} alt="KT DS" />
-        <p>Azure Tenant 신청 Portal</p>
+        <p>Azure Tenant Portal</p>
       </div>
       <nav className={styles.nav__wrapper}>
         {menus.map(({ url, title }) => (
@@ -67,6 +67,7 @@ const Header = () => {
       </nav>
       <div className={styles.header__user}>
         로그인 유저 :ㅤ<span>{user?.name}</span>
+        { user?.role === "ROLE_ADMIN" && <span className={styles.header__user__role}>&nbsp;(Admin)</span>}
       </div>
       {isLoading && <p>Loading...</p>}
       {error && <p>Error loading user data</p>}

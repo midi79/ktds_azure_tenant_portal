@@ -16,6 +16,7 @@ public class RequestBoardMapper {
         return new RequestBoardListDto(requestBoard.getId(),
             requestBoard.getTitle(),
             requestBoard.getWriter(),
+            requestBoard.getWriterEmail(),
             requestBoard.getCreateDate(),
             requestBoard.getState(),
             requestBoard.getRequestDate(),
@@ -39,6 +40,7 @@ public class RequestBoardMapper {
             board.setTitle(requestBoardDto.getTitle());
         }
         board.setWriter(requestBoardDto.getWriter());
+        board.setWriterEmail(requestBoardDto.getWriterEmail());
         board.setProjectCode(requestBoardDto.getProjectCode());
         board.setProjectName(requestBoardDto.getProjectName());
         board.setPurpose(requestBoardDto.getPurpose());
@@ -70,6 +72,7 @@ public class RequestBoardMapper {
         return new RequestBoardDto(board.getId(),
                 board.getTitle(),
                 board.getWriter(),
+                board.getWriterEmail(),
                 board.getProjectCode(),
                 board.getProjectName(),
                 board.getPurpose(),

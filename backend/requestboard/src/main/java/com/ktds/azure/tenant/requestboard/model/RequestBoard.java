@@ -32,6 +32,9 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
     @Column(nullable = false)
     private String writer;
 
+    @Column(nullable = false)
+    private String writerEmail;
+
     @Column
     private String projectCode;
 
@@ -109,6 +112,7 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", writer='" + writer + '\'' +
+                ", writerEmail='" + writerEmail + '\'' +
                 ", projectCode='" + projectCode + '\'' +
                 ", projectName='" + projectName + '\'' +
                 ", purpose='" + purpose + '\'' +
