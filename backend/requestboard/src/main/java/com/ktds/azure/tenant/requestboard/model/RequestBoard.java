@@ -106,6 +106,12 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
     @Column
     private LocalDateTime completeDate;
 
+    @Column(length = 4000)
+    private String denyReason;
+
+    @Column(length = 4000)
+    private String opinion;
+
     @Override
     public String toString() {
         return "RequestBoard{" +
@@ -136,6 +142,8 @@ public class RequestBoard extends BaseTimeEntity implements Serializable {
                 ", denyDate=" + denyDate +
                 ", approvedDate=" + approvedDate +
                 ", completeDate=" + completeDate +
+                ", denyReason=" + denyReason +
+                ", opinion=" + opinion +
                 '}';
     }
 }

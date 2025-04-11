@@ -99,7 +99,8 @@ const RequestBoardViewPage = () => {
                         <tr>    
                             <td>신청자</td>
                             <td>
-                                {data ? data.writer : null}
+                                {data ? data.writer : null}                                
+                                {data ? ` (${data.writerEmail})` : null}
                             </td>
                         </tr>
                         <tr>

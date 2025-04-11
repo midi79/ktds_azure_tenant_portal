@@ -2,6 +2,7 @@ package com.ktds.azure.tenant.requestboard.dto;
 
 import com.ktds.azure.tenant.requestboard.model.RequestBoardState;
 import com.ktds.azure.tenant.requestboard.model.RequestBoardType;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,9 @@ public class RequestBoardDto {
     private RequestBoardState state;
     private String budgetLink;
     private String request;
+    private String denyReason;
+    private String opinion;
+    private LocalDateTime requestDate;
 
     @Override
     public String toString() {
@@ -65,6 +69,9 @@ public class RequestBoardDto {
                 ", state=" + state +
                 ", budgetLink='" + budgetLink + '\'' +
                 ", request='" + request + '\'' +
+                ", denyReason='" + denyReason + '\'' +
+                ", opinion='" + opinion + '\'' +
+                ", requestDate='" + requestDate + '\'' +
                 '}';
     }
 }

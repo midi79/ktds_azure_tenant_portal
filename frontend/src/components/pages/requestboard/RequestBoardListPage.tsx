@@ -11,6 +11,8 @@ import { getRequestBoards } from "../../common/util/http";
 import Button from "../../common/widget/Button";
 import { format } from "date-fns";
 import useUserInfo from "../../common/store/user";
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 
 interface IBoardList {
     id: number;    
@@ -18,6 +20,10 @@ interface IBoardList {
     writer: string;
     editDate: Date;
     state: string;
+    requestDate : Date;
+    denyDate : Date;
+    completeDate : Date;
+    approvedDate : Date;    
 }
 
 interface ITestProp {
@@ -32,7 +38,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
     const [page, setPage] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [searchOption, setSearchOption] = useState<any>("title");
-    const [searchTerm, setSearchTerm] = useState<any>("");
+    const [searchTerm, setSearchTerm] = useState<any>("");    
     const [fromDate, setFromDate] = useState<any>(null);
     const [toDate, setToDate] = useState<any>(null);
     const {user} = useUserInfo();
@@ -94,7 +100,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
     const optionChangeHandler = (event: any) => {
         const option = event.target.value;
         setSearchOption(option);        
-        setSearchTerm("");        
+        setSearchTerm("");             
         setFromDate(null);
         setToDate(null);
     };
@@ -107,7 +113,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
     const searchResetHandler = async () => {
         const resetAllStates = () => {
             setSearchOption("title");
-            setSearchTerm("");
+            setSearchTerm("");            
             setFromDate(null);
             setToDate(null);
             setPage(0);
@@ -116,6 +122,17 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
 
         await resetAllStates();
         listRefetch();
+    };
+
+    const createStateTooltipMessage = (item: any) => {
+        return `
+            <div>
+                ${item.requestDate ? `등록 : ${format(item.requestDate, "yyyy-MM-dd HH:mm:ss")}<br/>` : ''}
+                ${item.denyDate ? `반려 : ${format(item.denyDate, "yyyy-MM-dd HH:mm:ss")}<br/>` : ''}
+                ${item.approvedDate ? `승인 : ${format(item.approvedDate, "yyyy-MM-dd HH:mm:ss")}<br/>` : ''}
+                ${item.completeDate ? `완료 : ${format(item.completeDate, "yyyy-MM-dd HH:mm:ss")}<br/>` : ''}
+            </div>
+        `;
     };
 
     return (
@@ -159,7 +176,10 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                         <td style={{textAlign:"center"}}>
                                             <DateTimeConverter date={item.createDate} />
                                         </td>
-                                        <td className={`${styles.td__state} ${styles[item.state]}`}>{stateAlias.find((state) => state.name === item.state)?.value }</td>
+                                        <td className={`${styles.td__state} ${styles[item.state]}`} data-tooltip-id={item.state} data-tooltip-html={createStateTooltipMessage(item)} >
+                                            {stateAlias.find((state) => state.name === item.state)?.value }                                            
+                                            {item.state !== "SAVE" && <Tooltip id={item.state} place="top" /> }
+                                        </td>
                                     </tr>
                                 ))}
                         </tbody>
@@ -191,7 +211,24 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                         dateFormat="yyyy-MM-dd"
                                     />
                                 </>
-                            ) : (
+                            ) : searchOption === "state" ? (
+                                <div className={styles.board__search__group}>
+                                    <select
+                                        id="stateOption"
+                                        value={searchTerm}
+                                        onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                                            setSearchTerm(event.target.value)
+                                        }
+                                    >
+                                        <option value="">선택하세요</option>
+                                        <option value="SAVE">임시저장</option>
+                                        <option value="REQUEST">등록</option>
+                                        <option value="APPROVED">승인</option>
+                                        <option value="DENY">반려</option>
+                                        <option value="COMPLETE">완료</option>
+                                    </select>
+                                </div>
+                                ) : (
                                 <input
                                     id="searchTerm"
                                     type="text"
@@ -199,7 +236,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                     onChange={(event) => setSearchTerm(event.target.value)}
                                     placeholder="Search"
                                 />
-                            )}
+                                )}                            
                         </div>
                         <div>
                             <Button title="Search" type="submit" />

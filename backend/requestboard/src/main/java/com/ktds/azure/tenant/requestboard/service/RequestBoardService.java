@@ -39,19 +39,12 @@ public class RequestBoardService {
     }
 
     public RequestBoardDto saveRequestBoard(RequestBoardDto requestBoardDto, HttpSession httpSession) {
-        // 일단 저장할때는 권한 체크 빼고 Front에서 writer 정보 셋팅 후에 처리
+        if(RequestBoardState.REQUEST == requestBoardDto.getState()) {
+            requestBoardDto.setRequestDate(LocalDateTime.now());
+        }
         RequestBoard board = RequestBoardMapper.toEntity(requestBoardDto, new RequestBoard());
         requestBoardRepository.save(board);
         return requestBoardDto;
-
-//        UserInfo userInfo = getUserInfo(httpSession);
-//        if (requestBoardDto.getWriter().equals(userInfo.getName())) {
-//            RequestBoard board = RequestBoardMapper.toEntity(requestBoardDto);
-//            requestBoardRepository.save(board);
-//            return requestBoardDto;
-//        } else {
-//            throw new RuntimeException("저장 권한이 없습니다.");
-//        }
     }
 
     public RequestBoardDto getRequestBoardById(Long id, HttpSession httpSession) {
@@ -68,8 +61,8 @@ public class RequestBoardService {
         UserInfo userInfo = getUserInfo(httpSession);
         RequestBoard requestBoard = requestBoardRepository.findById(requestBoardDto.getId()).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
         if(userInfo.getEmail().equals(requestBoard.getWriterEmail())) {
-            if(RequestBoardState.REQUEST.equals(requestBoardDto.getState())) {
-                requestBoard.setRequestDate(LocalDateTime.now());
+            if(RequestBoardState.REQUEST == requestBoardDto.getState()) {
+                requestBoardDto.setRequestDate(LocalDateTime.now());
             }
             return RequestBoardMapper.toDto(requestBoardRepository.save(RequestBoardMapper.toEntity(requestBoardDto, requestBoard)));
         } else {
