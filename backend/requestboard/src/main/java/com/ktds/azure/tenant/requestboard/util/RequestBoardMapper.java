@@ -60,6 +60,9 @@ public class RequestBoardMapper {
         board.setState(requestBoardDto.getState());
         board.setBudgetLink(requestBoardDto.getBudgetLink());
         board.setRequest(requestBoardDto.getRequest());
+        board.setDenyReason(requestBoardDto.getDenyReason());
+        board.setOpinion(requestBoardDto.getOpinion());
+        board.setRequestDate(requestBoardDto.getRequestDate());
 
         return board;
     }
@@ -91,7 +94,10 @@ public class RequestBoardMapper {
                 board.getType(),
                 board.getState(),
                 board.getBudgetLink(),
-                board.getRequest()
+                board.getRequest(),
+                board.getDenyReason(),
+                board.getOpinion(),
+                board.getRequestDate()
                 );
     }
 }

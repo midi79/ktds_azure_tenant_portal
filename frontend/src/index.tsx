@@ -22,40 +22,40 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "",
+    path: "/pages",
     element: <MainPage />,
     errorElement: <ErrorPage />,
     children: [      
       {
-        path: "pages/request",
+        path: "request",
         element: <RequestBoardListPage />,
       },
       {
-        path: "pages/request/edit",
+        path: "request/edit",
         element: <RequestBoardEditPage />,
       },
       {
-        path: "pages/request/view/:id",
+        path: "request/view/:id",
         element: <RequestBoardViewPage />,
       },
       {
-        path: "pages/request/edit/:id",
+        path: "request/edit/:id",
         element: <RequestBoardEditPage />,
       },
       {
-        path: "pages/qna",
+        path: "qna",
         element: <QnABoardListPage />,
       },
       {
-        path: "pages/qna/edit",
+        path: "qna/edit",
         element: <QnAFormPage />,
       },
       {
-        path: "pages/qna/view/:id",
+        path: "qna/view/:id",
         element: <QnABoardViewPage />,
       },
       {
-        path: "pages/qna/edit/:id",
+        path: "qna/edit/:id",
         element: <QnAFormPage />,
       },
     ],

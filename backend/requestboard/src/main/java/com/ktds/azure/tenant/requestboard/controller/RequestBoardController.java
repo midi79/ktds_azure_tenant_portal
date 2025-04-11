@@ -24,6 +24,11 @@ public class RequestBoardController {
     @Autowired
     RequestBoardService requestBoardService;
 
+    /**
+     * JWT Token에서 추출된 사용자 정보 Front로 전송
+     * @param httpSession
+     * @return UserInfo
+     */
     @GetMapping("/user")
     public ResponseEntity<UserInfo> getUserInfor(HttpSession httpSession) {
         return ResponseEntity.ok(requestBoardService.getUserInfo(httpSession));
@@ -34,22 +39,46 @@ public class RequestBoardController {
         return ResponseEntity.ok(requestBoardService.getAllRequestBoardList(pageable));
     }
 
+    /**
+     * 임시 저장 또는 신청시 (최초 저장 또는 신청시)
+     * @param requestBoardDto
+     * @param httpSession
+     * @return RequestBoardDto
+     */
     @PostMapping("/save")
     public ResponseEntity<RequestBoardDto> saveRequestBoard(@RequestBody RequestBoardDto requestBoardDto, HttpSession httpSession) {
         return ResponseEntity.ok(requestBoardService.saveRequestBoard(requestBoardDto, httpSession));
     }
 
+    /**
+     * ID별 내용 조회
+     * @param id
+     * @param httpSession
+     * @return RequestBoardDto
+     */
     @GetMapping("/{id}")
     public ResponseEntity<RequestBoardDto> getRequestBoard(@PathVariable("id") Long id, HttpSession httpSession) {
         RequestBoardDto requestBoardDto = requestBoardService.getRequestBoardById(id, httpSession);
         return requestBoardDto != null ? ResponseEntity.ok(requestBoardDto) : ResponseEntity.notFound().build();
     }
 
+    /**
+     * 내용 업데이트 (등록 포함)
+     * @param requestBoardDto
+     * @param httpSession
+     * @return RequestBoardDto
+     */
     @PatchMapping("/update")
     public ResponseEntity<RequestBoardDto> updateRequestBoard(@RequestBody RequestBoardDto requestBoardDto, HttpSession httpSession) {
         return ResponseEntity.ok(requestBoardService.updateRequestBoard(requestBoardDto, httpSession));
     }
 
+    /**
+     * 상태 변경 (승인, 반려, 완료)
+     * @param requestBoardDto
+     * @param httpSession
+     * @return String
+     */
     @PatchMapping("/update/state")
     public ResponseEntity<String> updateRequestBoardState(@RequestBody RequestBoardDto requestBoardDto, HttpSession httpSession) {
         requestBoardService.updateRequestBoardState(requestBoardDto, httpSession);

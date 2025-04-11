@@ -55,7 +55,7 @@ const RequestBoardEditPage = () => {
     const { mutate : saveMutate, isError, error } = useMutation({
         mutationFn: saveRequestBoard,
         onSuccess: () => {
-            alert("정상적으로 저장되었습니다");
+            alert("정상적으로 수행되었습니다");
             //queryClient.invalidateQueries({ queryKey: ["boards"] });
             navigate("/pages/request");
         },
@@ -99,6 +99,11 @@ const RequestBoardEditPage = () => {
         }
         if (selectedType === "workload" && (!startDate || !endDate)) {
             setValidationMessage("프로젝트 기간을 선택해주세요.");
+            setShowValidation(true);
+            return false;
+        }
+        if (selectedType === "workload" && (startDate > endDate)) {
+            setValidationMessage("프로젝트 종료일은 시작일 이후로 설정해야 합니다.");
             setShowValidation(true);
             return false;
         }
@@ -490,6 +495,7 @@ const RequestBoardEditPage = () => {
                                     width={300}
                                     defaultValue={data ? data.alertBudget : null}
                                     onChange={(e) => setFormData({...formData, alertBudget: e.target.value})}
+                                    readOnly={!isChecked}
                                 />
                             </td>
                         </tr>
