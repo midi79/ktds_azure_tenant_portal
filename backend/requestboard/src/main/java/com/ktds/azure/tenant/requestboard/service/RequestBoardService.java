@@ -39,6 +39,10 @@ public class RequestBoardService {
     }
 
     public RequestBoardDto saveRequestBoard(RequestBoardDto requestBoardDto, HttpSession httpSession) {
+        UserInfo userInfo = getUserInfo(httpSession);
+        if (userInfo == null || userInfo.getEmail() == null || userInfo.getEmail().isEmpty()) {
+            throw new RuntimeException("사용자 정보가 없어 저장할 수 없습니다.");
+        }
         if(RequestBoardState.REQUEST == requestBoardDto.getState()) {
             requestBoardDto.setRequestDate(LocalDateTime.now());
         }
@@ -76,7 +80,10 @@ public class RequestBoardService {
             RequestBoard board = requestBoardRepository.findById(requestBoardDto.getId()).orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
             board.setState(requestBoardDto.getState());
             switch (requestBoardDto.getState()) {
-                case RequestBoardState.DENY -> board.setDenyDate(LocalDateTime.now());
+                case RequestBoardState.DENY -> {
+                    board.setDenyDate(LocalDateTime.now());
+                    board.setDenyReason(requestBoardDto.getDenyReason());
+                }
                 case RequestBoardState.APPROVED -> board.setApprovedDate(LocalDateTime.now());
                 case RequestBoardState.COMPLETE -> board.setCompleteDate(LocalDateTime.now());
             }
@@ -84,7 +91,6 @@ public class RequestBoardService {
         } else {
             throw new RuntimeException("업데이트 권한이 없습니다.");
         }
-
     }
 
     public void deleteReqeuestBoardsByIds(RequestBoardDto requestBoardDto, HttpSession httpSession) {
@@ -109,7 +115,6 @@ public class RequestBoardService {
     public Page<RequestBoardListDto> searchBoards(String writer, String title, LocalDate fromDate, LocalDate toDate, RequestBoardState state, Pageable pageable) {
         LocalDateTime localDateTimeFromDate = fromDate != null ? fromDate.atStartOfDay() : null;
         LocalDateTime localDateTimeToDate = toDate != null ? toDate.plusDays(1).atStartOfDay() : null;
-        System.out.println("writer : " + writer + ", title : " + title + ", fromDate : " + fromDate + ", toDate : " + toDate + ", state : " + state);
 
         Page<RequestBoard> boardPage = requestBoardRepository.search(writer, title, localDateTimeFromDate, localDateTimeToDate, state, pageable);
         List<RequestBoardListDto> listDtos = boardPage.getContent().stream().map(RequestBoardMapper::toBoardListDto).collect(Collectors.toList());
