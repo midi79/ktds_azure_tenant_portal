@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Button from "../../common/widget/Button";
 import LongInput from "../../common/widget/LongInput";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   saveQnABoard,
   getQnABoard,

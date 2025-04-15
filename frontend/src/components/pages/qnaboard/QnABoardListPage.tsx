@@ -20,10 +20,6 @@ interface IBoardList {
   state: string; // 상태
 }
 
-interface ITestProp {
-  testData?: IBoardList[];
-}
-
 const listTitle: string[] = ["번호", "제목", "작성자", "작성일시", "상태"];
 
 const QnABoardListPage = () => {

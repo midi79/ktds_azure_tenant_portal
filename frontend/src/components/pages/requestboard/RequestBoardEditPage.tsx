@@ -37,6 +37,7 @@ const RequestBoardEditPage = () => {
         ipCount: "",
         budgetLink: "",
         request: "",
+        denyReason : "",
     });
 
     const navigate = useNavigate();
@@ -183,7 +184,7 @@ const RequestBoardEditPage = () => {
             writer : user?.name,
             writerEmail : user?.email,
             state : "SAVE",
-            id: id ? id : null,
+            id: id ? id : null,            
         };
 
         if (id) {
@@ -277,6 +278,7 @@ const RequestBoardEditPage = () => {
                 ipCount: data.ipCount || "",
                 budgetLink: data.budgetLink || "",
                 request: data.request || "",
+                denyReason : data.denyReason || "",
             });
 
             setId(data.id || null);
@@ -548,6 +550,14 @@ const RequestBoardEditPage = () => {
                                 />
                             </td>
                         </tr>
+                        { data && (data.state === "DENY" || data.denyReason !== null || data.denyReason !== "") &&
+                            <tr>
+                                <td>반려 사유</td>
+                                <td>
+                                    {data ? data.denyReason : null}
+                                </td>
+                            </tr>
+                        }
                     </tbody> 
                 </table>                
             </div>

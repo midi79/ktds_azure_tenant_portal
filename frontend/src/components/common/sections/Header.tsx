@@ -10,10 +10,12 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const menus = [
-    { url: "request", title: "신청" },
-    { url: "qna", title: "Q&A" },
-  ];
+  const ENV = import.meta.env.VITE_ENV;
+  const menus = [{ url: "request", title: "신청" }]
+  
+  if (ENV !== "prd") {    
+    menus.push({ url: "qna", title: "Q&A" });
+  }
 
   const { user, setUser } = useUserInfo();
 

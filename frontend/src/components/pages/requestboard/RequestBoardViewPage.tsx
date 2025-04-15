@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../common/widget/Button";
 import styles from "./RequestBoardViewPage.module.css";
@@ -5,12 +6,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getRequestBoard, updateRequestBoardState } from "../../common/util/http";
 import Checkbox from "../../common/widget/Checkbox";
 import useUserInfo from "../../common/store/user";
+import TextareaDialog from "../../common/widget/TextareaDialog";
 
 const RequestBoardViewPage = () => {
     const navigate = useNavigate();
-    const {user} = useUserInfo();
-
+    const { user } = useUserInfo();
     const { id } = useParams();
+
+    const [isDenyReasonDialogOpen, setDenyReasonDialogOpen] = useState(false);    
 
     const { data, isError, error } = useQuery({
         queryKey: ["requestBoard", id],
@@ -25,6 +28,7 @@ const RequestBoardViewPage = () => {
         mutationFn: updateRequestBoardState,
         onSuccess: () => {
             alert("정상적으로 수행되었습니다");
+            setDenyReasonDialogOpen(false);
             navigate("/pages/request");
         },
     });
@@ -46,14 +50,14 @@ const RequestBoardViewPage = () => {
         }
     }
 
-    const onDenyHandler = () => {
-        if(confirm("반려 하시겠습니까?")) {
-            const data = {
-                id : id,
-                state : "DENY"
-            }
-            updateMutate({ board: data });
+    const onDenyHandler = (text: string) => {        
+        const data = {
+            id : id,
+            state : "DENY",
+            denyReason : text
         }
+        
+        updateMutate({ board: data });                
     }
 
     const onCompleteHandler = () => {
@@ -66,6 +70,10 @@ const RequestBoardViewPage = () => {
         }
     }
 
+    const onCancelDeny = () => {
+        setDenyReasonDialogOpen(false);        
+    }
+
     return (
         <div className={styles.board__view__wrapper}>
             <div className={styles.board__view__header}>
@@ -76,7 +84,7 @@ const RequestBoardViewPage = () => {
                     { (data && data.state === "REQUEST" && user?.role === "ROLE_ADMIN") && (
                         <>                        
                             <Button title="승인" type="button" onClickHandler={onApproveHandler}/>
-                            <Button title="반려" type="button" onClickHandler={onDenyHandler}/>
+                            <Button title="반려" type="button" onClickHandler={() => setDenyReasonDialogOpen(true)}/>
                         </>
                         )
                     }
@@ -214,10 +222,14 @@ const RequestBoardViewPage = () => {
                             <td>
                                 {data ? data.request : null}
                             </td>
-                        </tr>
+                        </tr>                        
                     </tbody> 
                 </table>                
             </div>            
+            <TextareaDialog
+                isOpen={isDenyReasonDialogOpen}
+                onClose={onCancelDeny}
+                onSave={(text) => onDenyHandler(text)} />
             {isError && (
                 <div className={styles.board__view__validation}>{error.message || "Failed to get board."}</div>
             )}
