@@ -34,9 +34,7 @@ const WelcomePage = () => {
         <p className={styles.welcome__subtitle}>KT DS Azure Tenant Portal에 오신 것을 환영합니다. <br/>Azure 로그인 후 사용 가능합니다.</p>        
         <div className={styles.welcome__buttons}>
             <Button onClick={onClickTologIn}  title="Azure 로그인"/>
-            {ENV !== "dev" && ENV !== "prd" && 
-              <Button onClick={onClickToTemplogIn}  title="임시 로그인"/>            
-            }            
+            <Button onClick={onClickToTemplogIn}  title="게시판 바로가기"/>            
         </div>
       </div>
     );
