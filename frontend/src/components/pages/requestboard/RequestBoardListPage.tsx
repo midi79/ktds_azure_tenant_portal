@@ -13,6 +13,8 @@ import { format } from "date-fns";
 import useUserInfo from "../../common/store/user";
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
+import ImageDialog from "../../common/widget/ImageDialog";
+import seqDiagramImg from "../../../assets/images/at_portal_seq_diagram.png";
 
 interface IBoardList {
     id: number;    
@@ -41,6 +43,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
     const [searchTerm, setSearchTerm] = useState<any>("");    
     const [fromDate, setFromDate] = useState<any>(null);
     const [toDate, setToDate] = useState<any>(null);
+    const [seqDiagramDialogOpen, setSeqDiagramDialogOpen] = useState(false); 
     const {user} = useUserInfo();
 
     const navigate = useNavigate();
@@ -141,7 +144,8 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                 <div className={styles.board__content}>     
                     <div className={styles.board__top}>                        
                         <div className={styles.board__button}>
-                            <IconButton title="등록" icon={newIcon} onClickHandler={onNewClickHandler} />                            
+                            <Button title="신청 프로세스" onClickHandler={()=>setSeqDiagramDialogOpen(true)} />
+                            <IconButton title="신청" icon={newIcon} onClickHandler={onNewClickHandler} />                            
                         </div>
                     </div>
                     <table className={styles.board__table}>
@@ -291,6 +295,15 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                         </div>
                     )}
                 </div>
+                <ImageDialog 
+                    isOpen={seqDiagramDialogOpen}
+                    onClose={()=> setSeqDiagramDialogOpen(false)}
+                    title="AT Portal 신청 프로세스"
+                    desc="💡임시저장하지 않고 바로 등록 가능합니다."
+                    image={seqDiagramImg}
+                    width={530}
+                    height={480}
+                />
                 {isListLoading && <div>Loading Data....</div>}
                 {isListError && <div>{listError.message}</div>}                                
             </div>

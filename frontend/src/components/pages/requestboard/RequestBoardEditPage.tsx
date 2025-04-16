@@ -320,7 +320,7 @@ const RequestBoardEditPage = () => {
                 </div>
                 <div className={styles.board__edit__button}>
                     <Button title="임시저장" type="button" onClickHandler={onSaveHandler}/>
-                    <Button title="신청" type="submit" />
+                    <Button title="등록" type="submit" />
                     { id && 
                         <Button title="삭제" type="button" onClickHandler={onDeleteHandler}/>
                     }
