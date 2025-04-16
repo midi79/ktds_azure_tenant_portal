@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/dash/api/v1/qna-board")
+@RequestMapping("/qna/api/v1/qna-board")
 public class QnABoardController {
 
     @Autowired
