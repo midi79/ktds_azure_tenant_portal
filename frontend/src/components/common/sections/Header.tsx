@@ -29,7 +29,7 @@ const Header = () => {
   });
 
   const onTitleClickHandler = (): void => {
-    navigate("/pages/request");
+    navigate("/");
   };
 
   const onMenuClickHandler = (menu: string) => {

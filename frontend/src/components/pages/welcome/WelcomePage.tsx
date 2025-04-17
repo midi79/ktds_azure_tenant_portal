@@ -3,6 +3,7 @@ import styles from "./WelcomePage.module.css";
 import Button from "../../common/widget/Button";
 import ktdsImg from "../../../assets/images/ktdslogo.png";
 import azureImg from "../../../assets/images/ms_azure_logo_icon.png";
+import useUserInfo from "../../common/store/user";
 
 const ENV = import.meta.env.VITE_ENV;
 let BASE_URL = "http://localhost:8090";
@@ -14,13 +15,20 @@ if (ENV === "dev" || ENV === "prd") {
 const WelcomePage = () => {
 
     const navigate = useNavigate();
+    const { user } = useUserInfo();
 
     const onClickTologIn = () => {
       window.location.href = BASE_URL + "/auth/login";
     };
 
     const onClickToTemplogIn = () => {
-      navigate("/pages/request");
+      console.log("user : ", user);      
+      if (user && user.email != undefined && user.email != "") {
+        navigate("/pages/request");
+      } else {
+        alert("로그인 정보가 없어서 Azure 로그인 페이지로 이동합니다.")
+        window.location.href = BASE_URL + "/auth/login";
+      }      
     };
 
     return (

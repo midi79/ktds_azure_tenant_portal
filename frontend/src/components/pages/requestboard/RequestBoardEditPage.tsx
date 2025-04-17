@@ -87,6 +87,7 @@ const RequestBoardEditPage = () => {
     });
 
     const validateForm = (formData: any) => {
+        setShowValidation(false);
 
         if (!formData.projectName) {
           setValidationMessage("프로젝트명을 입력해주세요.");
@@ -123,6 +124,11 @@ const RequestBoardEditPage = () => {
             setShowValidation(true);
             return false;
         }
+        if (!formData.budgetManagerEmail.includes("@kt.com") && !formData.budgetManagerEmail.includes("@ktds.co.kr")) {
+            setValidationMessage("예산 담당자의 KT 이메일 주소를 입력해주세요.");
+            setShowValidation(true);
+            return false;
+        }
         if (!formData.operationManager) {
           setValidationMessage("운영 담당자를 입력해주세요.");
           setShowValidation(true);
@@ -130,6 +136,11 @@ const RequestBoardEditPage = () => {
         }
         if (!formData.operationManagerEmail) {
             setValidationMessage("운영 담당자 Email을 입력해주세요.");
+            setShowValidation(true);
+            return false;
+        }
+        if (!formData.operationManagerEmail.includes("@kt.com") && !formData.operationManagerEmail.includes("@ktds.co.kr")) {
+            setValidationMessage("운영 담당자의 KT 이메일 주소를 입력해주세요.");
             setShowValidation(true);
             return false;
         }
@@ -550,7 +561,7 @@ const RequestBoardEditPage = () => {
                                 />
                             </td>
                         </tr>
-                        { data && (data.state === "DENY" || data.denyReason !== null || data.denyReason !== "") &&
+                        { data && (data.state === "DENY" || data.denyReason !== "") &&
                             <tr>
                                 <td>반려 사유</td>
                                 <td>
