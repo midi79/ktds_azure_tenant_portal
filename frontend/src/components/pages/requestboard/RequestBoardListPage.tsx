@@ -168,7 +168,7 @@ const RequestBoardListPage = ({ testData }: ITestProp) => {
                                 boardListData.map((item: any) => (
                                     <tr className={styles.board__list} key={item.id}>                                        
                                         <td className={styles.td__id}>{item.id}</td>
-                                        { item.writerEmail === user?.email || user?.role === "ROLE_ADMIN" || item.writerEmail === "jang.sh@kt.com" ?
+                                        { item.writerEmail === user?.email || user?.role === "ROLE_ADMIN" || item.writerEmail === "82288183@ktds.co.kr" ?
                                             (<td className={styles.td__title} onClick={() => onTitleClickHandler(item)}>
                                                 {item.title}
                                             </td>) : 

@@ -56,7 +56,7 @@ public class RequestBoardService {
         RequestBoard requestBoard = requestBoardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
         if (userInfo.getEmail().equals(requestBoard.getWriterEmail())
                 || userInfo.getRole().equals(RequestBoardRole.ROLE_ADMIN.name())
-                || requestBoard.getWriterEmail().equals("jang.sh@kt.com") // 2025.04.21 임시로 관리자가 쓴 글은 다 볼 수 있게 하드코딩
+                || requestBoard.getWriterEmail().equals("82288183@ktds.co.kr") // 2025.04.21 임시로 관리자가 쓴 글은 다 볼 수 있게 하드코딩
         ) {
             return RequestBoardMapper.toDto(requestBoard);
         } else {
